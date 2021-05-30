@@ -10,20 +10,13 @@
 #pragma resource "*.dfm"
 TfmItemProp *fmItemProp;
 //---------------------------------------------------------------------------
-__fastcall TfmItemProp::TfmItemProp(TComponent* Owner)
-	: TForm(Owner)
-{
+__fastcall TfmItemProp::TfmItemProp(TComponent *Owner) : TForm(Owner) {}
+//---------------------------------------------------------------------------
+void __fastcall TfmItemProp::FormCloseQuery(TObject *Sender, bool &CanClose) {
+  CanClose = false;
 }
 //---------------------------------------------------------------------------
-void __fastcall TfmItemProp::FormCloseQuery(TObject *Sender,
-      bool &CanClose)
-{
-	CanClose = false;
-}
-//---------------------------------------------------------------------------
-void __fastcall TfmItemProp::FormClose(TObject *Sender,
-      TCloseAction &Action)
-{
-	Action = caMinimize;
+void __fastcall TfmItemProp::FormClose(TObject *Sender, TCloseAction &Action) {
+  Action = caMinimize;
 }
 //---------------------------------------------------------------------------

@@ -17,17 +17,17 @@ namespace steering_behaviour {
 
 class base : private boost::noncopyable {
 public:
-						base		(CAI_Rat const *object);
-	virtual				~base		() {}
-	virtual	Fvector		direction	() = 0;
+  base(CAI_Rat const *object);
+  virtual ~base() {}
+  virtual Fvector direction() = 0;
 
 public:
-	IC		void		enabled		(bool const &value);
-	IC		bool const	&enabled	() const;
+  IC void enabled(bool const &value);
+  IC bool const &enabled() const;
 
 private:
-	CAI_Rat const		*m_object;
-	bool				m_enabled;
+  CAI_Rat const *m_object;
+  bool m_enabled;
 };
 
 } // namespace steering_behaviour

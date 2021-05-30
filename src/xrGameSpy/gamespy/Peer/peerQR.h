@@ -1,5 +1,5 @@
 /*
-GameSpy Peer SDK 
+GameSpy Peer SDK
 Dan "Mr. Pants" Schoenblum
 dan@gamespy.com
 
@@ -16,16 +16,14 @@ devsupport@gamespy.com
 *************/
 #include "peerMain.h"
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-
 /************
 ** DEFINES **
 ************/
-#define PI_QUERYPORT       6500
+#define PI_QUERYPORT 6500
 
 /**************
 ** FUNCTIONS **

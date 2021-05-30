@@ -28,14 +28,14 @@ uLaw:          160             160            64000
 PCM:           160             320           128000
 */
 
-GVBool gviLGCodecInitialize(const char * name);
+GVBool gviLGCodecInitialize(const char *name);
 void gviLGCodecCleanup(void);
 
 int gviLGCodecGetSamplesPerFrame(void);
 int gviLGCodecGetEncodedFrameSize(void);
 
-void gviLGCodecEncode(GVByte * out, const GVSample * in);
-void gviLGCodecDecodeAdd(GVSample * out, const GVByte * in, GVDecoderData data);
-void gviLGCodecDecodeSet(GVSample * out, const GVByte * in, GVDecoderData data);
+void gviLGCodecEncode(GVByte *out, const GVSample *in);
+void gviLGCodecDecodeAdd(GVSample *out, const GVByte *in, GVDecoderData data);
+void gviLGCodecDecodeSet(GVSample *out, const GVByte *in, GVDecoderData data);
 
 #endif

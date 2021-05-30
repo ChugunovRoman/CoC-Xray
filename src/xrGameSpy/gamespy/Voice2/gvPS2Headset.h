@@ -22,7 +22,8 @@ GVBool gviPS2HeadsetStartup(void);
 void gviPS2HeadsetCleanup(void);
 void gviPS2HeadsetThink(void);
 
-int gviPS2HeadsetListDevices(GVDeviceInfo devices[], int maxDevices, GVDeviceType types);
+int gviPS2HeadsetListDevices(GVDeviceInfo devices[], int maxDevices,
+                             GVDeviceType types);
 
 GVDevice gviPS2HeadsetNewDevice(GVDeviceID deviceID, GVDeviceType type);
 

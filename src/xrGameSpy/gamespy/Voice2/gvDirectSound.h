@@ -18,7 +18,8 @@ GVBool gviHardwareStartup(HWND hWnd);
 void gviHardwareCleanup(void);
 void gviHardwareThink(void);
 
-int gviHardwareListDevices(GVDeviceInfo devices[], int maxDevices, GVDeviceType types);
+int gviHardwareListDevices(GVDeviceInfo devices[], int maxDevices,
+                           GVDeviceType types);
 
 GVDevice gviHardwareNewDevice(GVDeviceID deviceID, GVDeviceType type);
 

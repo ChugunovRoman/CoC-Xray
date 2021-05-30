@@ -13,52 +13,49 @@
 
 #include "WmlMinimize1.h"
 
-namespace Wml
-{
+namespace Wml {
 
-template <class Real>
-class WML_ITEM MinimizeN
-{
+template <class Real> class WML_ITEM MinimizeN {
 public:
-    typedef Real (*Function)(const Real*,void*);
+  typedef Real (*Function)(const Real *, void *);
 
-    MinimizeN (int iDimensions, Function oFunction, int iMaxLevel,
-        int iMaxBracket, int iMaxIterations, void* pvData = 0);
+  MinimizeN(int iDimensions, Function oFunction, int iMaxLevel, int iMaxBracket,
+            int iMaxIterations, void *pvData = 0);
 
-    ~MinimizeN ();
+  ~MinimizeN();
 
-    int& MaxLevel ();
-    int& MaxBracket ();
-    void*& UserData ();
+  int &MaxLevel();
+  int &MaxBracket();
+  void *&UserData();
 
-    // find minimum on Cartesian-product domain
-    void GetMinimum (const Real* afT0, const Real* afT1,
-        const Real* afTInitial, Real* afTMin, Real& rfFMin);
+  // find minimum on Cartesian-product domain
+  void GetMinimum(const Real *afT0, const Real *afT1, const Real *afTInitial,
+                  Real *afTMin, Real &rfFMin);
 
 protected:
-    int m_iDimensions;
-    Function m_oFunction;
-    int m_iMaxIterations;
-    void* m_pvData;
-    Minimize1<Real> m_kMinimizer;
-    Real* m_afDirectionStorage;
-    Real** m_aafDirection;
-    Real* m_afDConj;
-    Real* m_afDCurr;
-    Real* m_afTSave;
-    Real* m_afTCurr;
-    Real m_fFCurr;
-    Real* m_afLineArg;
+  int m_iDimensions;
+  Function m_oFunction;
+  int m_iMaxIterations;
+  void *m_pvData;
+  Minimize1<Real> m_kMinimizer;
+  Real *m_afDirectionStorage;
+  Real **m_aafDirection;
+  Real *m_afDConj;
+  Real *m_afDCurr;
+  Real *m_afTSave;
+  Real *m_afTCurr;
+  Real m_fFCurr;
+  Real *m_afLineArg;
 
-    void ComputeDomain (const Real* afT0, const Real* afT1, Real& rfL0,
-        Real& rfL1);
+  void ComputeDomain(const Real *afT0, const Real *afT1, Real &rfL0,
+                     Real &rfL1);
 
-    static Real LineFunction (Real fT, void* pvData);
+  static Real LineFunction(Real fT, void *pvData);
 };
 
 typedef MinimizeN<float> MinimizeNf;
 typedef MinimizeN<double> MinimizeNd;
 
-}
+} // namespace Wml
 
 #endif

@@ -5,11 +5,10 @@
 #include "xr_dsa.h"
 #include "xr_sha.h"
 
-namespace crypto
-{
+namespace crypto {
 
-CRYPTO_API	void		xr_crypto_init			();
+CRYPTO_API void xr_crypto_init();
 
-} //namespace crypto
+} // namespace crypto
 
 #endif

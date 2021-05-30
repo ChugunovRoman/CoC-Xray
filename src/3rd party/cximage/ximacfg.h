@@ -1,42 +1,43 @@
 #if !defined(__ximaCFG_h)
 #define __ximaCFG_h
 
-extern "C" void*	cxalloc(size_t size);
-extern "C" void		cxfree(void* ptr);
-extern "C" void*	cxrealloc(void* ptr, size_t size);
+extern "C" void *cxalloc(size_t size);
+extern "C" void cxfree(void *ptr);
+extern "C" void *cxrealloc(void *ptr, size_t size);
 
-#ifdef CXIMAGE_AS_SHARED_LIBRARY //must be defined in Release_Shared configuration
+#ifdef CXIMAGE_AS_SHARED_LIBRARY // must be defined in Release_Shared
+                                 // configuration
 
 #include "xrCore/xrCore.h"
 
-#pragma comment(lib,"libjpeg.lib")
-#pragma comment(lib,"xrCore.lib")
+#pragma comment(lib, "libjpeg.lib")
+#pragma comment(lib, "xrCore.lib")
 
 #ifdef DEBUG
 #include "xrCore/ftimer.h"
 #endif //#ifdef DEBUG
 
-#ifdef	CXIMAGE_BUILD
-#	define	CXIMAGE_API	__declspec(dllexport)
+#ifdef CXIMAGE_BUILD
+#define CXIMAGE_API __declspec(dllexport)
 #else
-#	define	CXIMAGE_API	__declspec(dllimport)
+#define CXIMAGE_API __declspec(dllimport)
 #endif //#ifdef	CXIMAGE_BUILD
-#else  //if CXIMAGE_AS_SHARED_LIBRARY linking as static library ...
-#	define	CXIMAGE_API
-#endif //CXIMAGE_AS_SHARED_LIBRARY
+#else  // if CXIMAGE_AS_SHARED_LIBRARY linking as static library ...
+#define CXIMAGE_API
+#endif // CXIMAGE_AS_SHARED_LIBRARY
 
 /////////////////////////////////////////////////////////////////////////////
 // CxImage supported features
-#define CXIMAGE_SUPPORT_ALPHA          1
-#define CXIMAGE_SUPPORT_SELECTION      1
+#define CXIMAGE_SUPPORT_ALPHA 1
+#define CXIMAGE_SUPPORT_SELECTION 1
 #define CXIMAGE_SUPPORT_TRANSFORMATION 1
-#define CXIMAGE_SUPPORT_DSP            1
-#define CXIMAGE_SUPPORT_LAYERS		   1
-#define CXIMAGE_SUPPORT_INTERPOLATION  1
+#define CXIMAGE_SUPPORT_DSP 1
+#define CXIMAGE_SUPPORT_LAYERS 1
+#define CXIMAGE_SUPPORT_INTERPOLATION 1
 
-#define CXIMAGE_SUPPORT_DECODE	1
-#define CXIMAGE_SUPPORT_ENCODE	1		//<vho><T.Peck>
-#define	CXIMAGE_SUPPORT_WINDOWS 1
+#define CXIMAGE_SUPPORT_DECODE 1
+#define CXIMAGE_SUPPORT_ENCODE 1 //<vho><T.Peck>
+#define CXIMAGE_SUPPORT_WINDOWS 1
 
 /////////////////////////////////////////////////////////////////////////////
 // CxImage supported formats
@@ -57,14 +58,15 @@ extern "C" void*	cxrealloc(void* ptr, size_t size);
 #define CXIMAGE_SUPPORT_PNM 0
 #define CXIMAGE_SUPPORT_RAS 0
 
-#define CXIMAGE_SUPPORT_JBG 0		// GPL'd see ../jbig/copying.txt & ../jbig/patents.htm
+#define CXIMAGE_SUPPORT_JBG                                                    \
+  0 // GPL'd see ../jbig/copying.txt & ../jbig/patents.htm
 
 #define CXIMAGE_SUPPORT_MNG 0
 #define CXIMAGE_SUPPORT_SKA 0
 #define CXIMAGE_SUPPORT_RAW 0
 
 /////////////////////////////////////////////////////////////////////////////
-#define	CXIMAGE_MAX_MEMORY 268435456
+#define CXIMAGE_MAX_MEMORY 268435456
 
 #define CXIMAGE_DEFAULT_DPI 96
 
@@ -74,8 +76,8 @@ extern "C" void*	cxrealloc(void* ptr, size_t size);
 #define CXIMAGE_SUPPORT_EXCEPTION_HANDLING 0
 
 /////////////////////////////////////////////////////////////////////////////
-//color to grey mapping <H. Muelner> <jurgene>
+// color to grey mapping <H. Muelner> <jurgene>
 //#define RGB2GRAY(r,g,b) (((b)*114 + (g)*587 + (r)*299)/1000)
-#define RGB2GRAY(r,g,b) (((b)*117 + (g)*601 + (r)*306) >> 10)
+#define RGB2GRAY(r, g, b) (((b)*117 + (g)*601 + (r)*306) >> 10)
 
 #endif

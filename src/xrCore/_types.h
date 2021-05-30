@@ -17,8 +17,8 @@ typedef unsigned __int64 u64;
 typedef float f32;
 typedef double f64;
 
-typedef char* pstr;
-typedef const char* pcstr;
+typedef char *pstr;
+typedef const char *pcstr;
 
 // windoze stuff
 #ifndef _WINDOWS_

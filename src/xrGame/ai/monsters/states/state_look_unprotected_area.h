@@ -1,27 +1,29 @@
 #pragma once
-#include "../state.h"
-#include "state_data.h"
 #include "../../../ai_object_location.h"
 #include "../../../ai_space.h"
 #include "../../../level_graph.h"
+#include "../state.h"
+#include "state_data.h"
 
-template<typename _Object>
+template <typename _Object>
 class CStateMonsterLookToUnprotectedArea : public CState<_Object> {
-	typedef CState<_Object> inherited;
+  typedef CState<_Object> inherited;
 
-	SStateDataAction	data;
+  SStateDataAction data;
 
-	Fvector				target_point;	
+  Fvector target_point;
 
 public:
-						CStateMonsterLookToUnprotectedArea	(_Object *obj);
-	virtual				~CStateMonsterLookToUnprotectedArea	();
+  CStateMonsterLookToUnprotectedArea(_Object *obj);
+  virtual ~CStateMonsterLookToUnprotectedArea();
 
-	virtual void		initialize					();
-	virtual	void		execute						();
-	virtual void		remove_links				(CObject* object) { inherited::remove_links(object);}
+  virtual void initialize();
+  virtual void execute();
+  virtual void remove_links(CObject *object) {
+    inherited::remove_links(object);
+  }
 
-	virtual bool		check_completion			();
+  virtual bool check_completion();
 };
 
 #include "state_look_unprotected_area_inline.h"

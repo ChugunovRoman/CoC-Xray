@@ -25,23 +25,23 @@
 
 /* include *everything* here */
 
-#include "config.h"
-#include "compatibility.h"
+#include "collision.h"
+#include "collision_space.h"
 #include "common.h"
+#include "compatibility.h"
+#include "config.h"
 #include "contact.h"
 #include "error.h"
-#include "memory.h"
-#include "odemath.h"
-#include "matrix.h"
-#include "timer.h"
-#include "rotation.h"
+#include "export-dif.h"
 #include "mass.h"
+#include "matrix.h"
+#include "memory.h"
 #include "misc.h"
 #include "objects.h"
 #include "odecpp.h"
-#include "collision_space.h"
-#include "collision.h"
 #include "odecpp_collision.h"
-#include "export-dif.h"
+#include "odemath.h"
+#include "rotation.h"
+#include "timer.h"
 
 #endif

@@ -1,5 +1,5 @@
 // Copyright NVIDIA Corporation 2007 -- Ignacio Castano <icastano@nvidia.com>
-// 
+//
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
 // files (the "Software"), to deal in the Software without
@@ -8,10 +8,10 @@
 // copies of the Software, and to permit persons to whom the
 // Software is furnished to do so, subject to the following
 // conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
 // OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -26,25 +26,25 @@
 
 #include <nvimage/nvimage.h>
 
-namespace nv
-{
-	struct ColorBlock;
-	struct BlockDXT1;
-	struct BlockDXT3;
-	struct BlockDXT5;
-	struct AlphaBlockDXT3;
-	struct AlphaBlockDXT5;
+namespace nv {
+struct ColorBlock;
+struct BlockDXT1;
+struct BlockDXT3;
+struct BlockDXT5;
+struct AlphaBlockDXT3;
+struct AlphaBlockDXT5;
 
-	namespace QuickCompress
-	{
-		void compressDXT1(const ColorBlock & rgba, BlockDXT1 * dxtBlock);
-		void compressDXT1a(const ColorBlock & rgba, BlockDXT1 * dxtBlock);
-		
-		void compressDXT3(const ColorBlock & rgba, BlockDXT3 * dxtBlock);
-		
-		void compressDXT5A(const ColorBlock & rgba, AlphaBlockDXT5 * dxtBlock, int iterationCount=8);
-		void compressDXT5(const ColorBlock & rgba, BlockDXT5 * dxtBlock, int iterationCount=8);
-	}
-} // nv namespace
+namespace QuickCompress {
+void compressDXT1(const ColorBlock &rgba, BlockDXT1 *dxtBlock);
+void compressDXT1a(const ColorBlock &rgba, BlockDXT1 *dxtBlock);
+
+void compressDXT3(const ColorBlock &rgba, BlockDXT3 *dxtBlock);
+
+void compressDXT5A(const ColorBlock &rgba, AlphaBlockDXT5 *dxtBlock,
+                   int iterationCount = 8);
+void compressDXT5(const ColorBlock &rgba, BlockDXT5 *dxtBlock,
+                  int iterationCount = 8);
+} // namespace QuickCompress
+} // namespace nv
 
 #endif // NV_TT_QUICKCOMPRESSDXT_H

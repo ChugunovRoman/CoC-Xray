@@ -4,8 +4,7 @@
 #include "ximadef.h"
 
 //***bd*** simple floating point point
-class DLL_EXP CxPoint2
-{
+class DLL_EXP CxPoint2 {
 public:
   CxPoint2();
   CxPoint2(float const x_, float const y_);
@@ -14,12 +13,11 @@ public:
   float Distance(CxPoint2 const p2);
   float Distance(float const x_, float const y_);
 
-  float x,y;
+  float x, y;
 };
 
-//and simple rectangle
-class DLL_EXP CxRect2
-{
+// and simple rectangle
+class DLL_EXP CxRect2 {
 public:
   CxRect2();
   CxRect2(float const x1_, float const y1_, float const x2_, float const y2_);

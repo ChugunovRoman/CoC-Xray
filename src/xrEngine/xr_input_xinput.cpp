@@ -6,12 +6,14 @@
 
 DXUT_GAMEPAD g_GamePads[DXUT_MAX_CONTROLLERS];
 
-typedef DWORD (WINAPI* LPXINPUTGETSTATE)(DWORD dwUserIndex, XINPUT_STATE* pState );
-typedef DWORD (WINAPI* LPXINPUTSETSTATE)(DWORD dwUserIndex, XINPUT_VIBRATION* pVibration );
-typedef DWORD (WINAPI* LPXINPUTGETCAPABILITIES)( DWORD dwUserIndex, DWORD dwFlags, XINPUT_CAPABILITIES* pCapabilities );
-typedef void (WINAPI* LPXINPUTENABLE)(BOOL bEnable);
+typedef DWORD (WINAPI* LPXINPUTGETSTATE)(DWORD dwUserIndex, XINPUT_STATE* pState
+); typedef DWORD (WINAPI* LPXINPUTSETSTATE)(DWORD dwUserIndex, XINPUT_VIBRATION*
+pVibration ); typedef DWORD (WINAPI* LPXINPUTGETCAPABILITIES)( DWORD
+dwUserIndex, DWORD dwFlags, XINPUT_CAPABILITIES* pCapabilities ); typedef void
+(WINAPI* LPXINPUTENABLE)(BOOL bEnable);
 
-HRESULT DXUTGetGamepadState( DWORD dwPort, DXUT_GAMEPAD* pGamePad, bool bThumbstickDeadZone, bool bSnapThumbstickToCardinals )
+HRESULT DXUTGetGamepadState( DWORD dwPort, DXUT_GAMEPAD* pGamePad, bool
+bThumbstickDeadZone, bool bSnapThumbstickToCardinals )
 {
 if( dwPort >= DXUT_MAX_CONTROLLERS || pGamePad == NULL )
 return E_FAIL;
@@ -24,7 +26,8 @@ HINSTANCE hInst = LoadLibrary( XINPUT_DLL );
 if( hInst )
 {
 s_pXInputGetState = (LPXINPUTGETSTATE)GetProcAddress( hInst, "XInputGetState" );
-s_pXInputGetCapabilities = (LPXINPUTGETCAPABILITIES)GetProcAddress( hInst, "XInputGetCapabilities" );
+s_pXInputGetCapabilities = (LPXINPUTGETCAPABILITIES)GetProcAddress( hInst,
+"XInputGetCapabilities" );
 }
 }
 if( s_pXInputGetState == NULL )
@@ -53,32 +56,38 @@ if( s_pXInputGetCapabilities )
 s_pXInputGetCapabilities( dwPort, XINPUT_DEVTYPE_GAMEPAD, &pGamePad->caps );
 }
 
-// Copy gamepad to local structure (assumes that XINPUT_GAMEPAD at the front in CONTROLER_STATE)
-memcpy( pGamePad, &InputState.Gamepad, sizeof(XINPUT_GAMEPAD) );
+// Copy gamepad to local structure (assumes that XINPUT_GAMEPAD at the front in
+CONTROLER_STATE) memcpy( pGamePad, &InputState.Gamepad, sizeof(XINPUT_GAMEPAD)
+);
 
 if( bSnapThumbstickToCardinals )
 {
-// Apply deadzone to each axis independantly to slightly snap to up/down/left/right
-if( pGamePad->sThumbLX < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE && pGamePad->sThumbLX > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE )
-pGamePad->sThumbLX = 0;
-if( pGamePad->sThumbLY < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE && pGamePad->sThumbLY > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE )
-pGamePad->sThumbLY = 0;
-if( pGamePad->sThumbRX < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE && pGamePad->sThumbRX > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE )
-pGamePad->sThumbRX = 0;
-if( pGamePad->sThumbRY < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE && pGamePad->sThumbRY > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE )
-pGamePad->sThumbRY = 0;
+// Apply deadzone to each axis independantly to slightly snap to
+up/down/left/right if( pGamePad->sThumbLX < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE
+&& pGamePad->sThumbLX > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE ) pGamePad->sThumbLX
+= 0; if( pGamePad->sThumbLY < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
+pGamePad->sThumbLY > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE ) pGamePad->sThumbLY =
+0; if( pGamePad->sThumbRX < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE &&
+pGamePad->sThumbRX > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE ) pGamePad->sThumbRX =
+0; if( pGamePad->sThumbRY < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE &&
+pGamePad->sThumbRY > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE ) pGamePad->sThumbRY =
+0;
 }
 else if( bThumbstickDeadZone )
 {
 // Apply deadzone if centered
-if( (pGamePad->sThumbLX < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE && pGamePad->sThumbLX > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) &&
-(pGamePad->sThumbLY < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE && pGamePad->sThumbLY > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) )
+if( (pGamePad->sThumbLX < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
+pGamePad->sThumbLX > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) && (pGamePad->sThumbLY
+< XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE && pGamePad->sThumbLY >
+-XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) )
 {
 pGamePad->sThumbLX = 0;
 pGamePad->sThumbLY = 0;
 }
-if( (pGamePad->sThumbRX < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE && pGamePad->sThumbRX > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) &&
-(pGamePad->sThumbRY < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE && pGamePad->sThumbRY > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) )
+if( (pGamePad->sThumbRX < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE &&
+pGamePad->sThumbRX > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) &&
+(pGamePad->sThumbRY < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE && pGamePad->sThumbRY
+> -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) )
 {
 pGamePad->sThumbRX = 0;
 pGamePad->sThumbRY = 0;
@@ -93,18 +102,18 @@ pGamePad->fThumbRY = pGamePad->sThumbRY / 32767.0f;
 
 // Get the boolean buttons that have been pressed since the last call.
 // Each button is represented by one bit.
-pGamePad->wPressedButtons = ( pGamePad->wLastButtons ^ pGamePad->wButtons ) & pGamePad->wButtons;
-pGamePad->wLastButtons = pGamePad->wButtons;
+pGamePad->wPressedButtons = ( pGamePad->wLastButtons ^ pGamePad->wButtons ) &
+pGamePad->wButtons; pGamePad->wLastButtons = pGamePad->wButtons;
 
 // Figure out if the left trigger has been pressed or released
 bool bPressed = ( pGamePad->bLeftTrigger > DXUT_GAMEPAD_TRIGGER_THRESHOLD );
-pGamePad->bPressedLeftTrigger = ( bPressed ) ? !pGamePad->bLastLeftTrigger : false;
-pGamePad->bLastLeftTrigger = bPressed;
+pGamePad->bPressedLeftTrigger = ( bPressed ) ? !pGamePad->bLastLeftTrigger :
+false; pGamePad->bLastLeftTrigger = bPressed;
 
 // Figure out if the right trigger has been pressed or released
 bPressed = ( pGamePad->bRightTrigger > DXUT_GAMEPAD_TRIGGER_THRESHOLD );
-pGamePad->bPressedRightTrigger = ( bPressed ) ? !pGamePad->bLastRightTrigger : false;
-pGamePad->bLastRightTrigger = bPressed;
+pGamePad->bPressedRightTrigger = ( bPressed ) ? !pGamePad->bLastRightTrigger :
+false; pGamePad->bLastRightTrigger = bPressed;
 
 return S_OK;
 }

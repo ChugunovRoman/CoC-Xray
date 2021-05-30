@@ -2,14 +2,13 @@
 
 class ENGINE_API ICollisionForm;
 
-class ENGINE_API ICollidable
-{
+class ENGINE_API ICollidable {
 public:
-    struct
-    {
-        ICollisionForm* model;
-    } collidable;
+  struct {
+    ICollisionForm *model;
+  } collidable;
+
 public:
-    ICollidable();
-    virtual ~ICollidable();
+  ICollidable();
+  virtual ~ICollidable();
 };

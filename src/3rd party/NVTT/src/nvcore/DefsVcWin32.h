@@ -8,10 +8,10 @@
 #define DLL_EXPORT_CLASS DLL_EXPORT
 
 // Function calling modes
-#define NV_CDECL        __cdecl
-#define NV_STDCALL      __stdcall
-#define NV_FASTCALL     __fastcall
-#define NV_FORCEINLINE  __forceinline
+#define NV_CDECL __cdecl
+#define NV_STDCALL __stdcall
+#define NV_FASTCALL __fastcall
+#define NV_FORCEINLINE __forceinline
 #define NV_DEPRECATED
 
 #define NV_PURE
@@ -20,13 +20,13 @@
 // Set standard function names.
 #define snprintf _snprintf
 #if _MSC_VER < 1500
-#	define vsnprintf _vsnprintf
+#define vsnprintf _vsnprintf
 #endif
 #define vsscanf _vsscanf
 #define chdir _chdir
-#define getcwd _getcwd 
+#define getcwd _getcwd
 
-#define va_copy(a, b)	a = b
+#define va_copy(a, b) a = b
 
 #if !defined restrict
 #define restrict
@@ -36,43 +36,46 @@
 #define __attribute__(X)
 
 #if !defined __FUNC__
-#define __FUNC__ __FUNCTION__ 
+#define __FUNC__ __FUNCTION__
 #endif
 
-
 // Type definitions
-typedef unsigned char       uint8;
-typedef signed char         int8;
+typedef unsigned char uint8;
+typedef signed char int8;
 
-typedef unsigned short      uint16;
-typedef signed short        int16;
+typedef unsigned short uint16;
+typedef signed short int16;
 
-typedef unsigned int        uint32;
-typedef signed int          int32;
+typedef unsigned int uint32;
+typedef signed int int32;
 
-typedef unsigned __int64    uint64;
-typedef signed __int64      int64;
+typedef unsigned __int64 uint64;
+typedef signed __int64 int64;
 
 // Aliases
-typedef uint32              uint;
-
+typedef uint32 uint;
 
 // Unwanted VC++ warnings to disable.
 /*
-#pragma warning(disable : 4244)		// conversion to float, possible loss of data
-#pragma warning(disable : 4245)		// conversion from 'enum ' to 'unsigned long', signed/unsigned mismatch
-#pragma warning(disable : 4100)		// unreferenced formal parameter
-#pragma warning(disable : 4514)		// unreferenced inline function has been removed
-#pragma warning(disable : 4710)		// inline function not expanded
+#pragma warning(disable : 4244)		// conversion to float, possible loss of
+data #pragma warning(disable : 4245)		// conversion from 'enum ' to
+'unsigned long', signed/unsigned mismatch #pragma warning(disable : 4100)
+// unreferenced formal parameter
+#pragma warning(disable : 4514)		// unreferenced inline function has been
+removed #pragma warning(disable : 4710)		// inline function not expanded
 #pragma warning(disable : 4127)		// Conditional expression is constant
-#pragma warning(disable : 4305)		// truncation from 'const double' to 'float'
-#pragma warning(disable : 4505)		// unreferenced local function has been removed
+#pragma warning(disable : 4305)		// truncation from 'const double' to
+'float' #pragma warning(disable : 4505)		// unreferenced local function
+has been removed
 
-#pragma warning(disable : 4702)		// unreachable code in inline expanded function
-#pragma warning(disable : 4711)		// function selected for automatic inlining
-#pragma warning(disable : 4725)		// Pentium fdiv bug
+#pragma warning(disable : 4702)		// unreachable code in inline expanded
+function #pragma warning(disable : 4711)		// function selected for
+automatic inlining #pragma warning(disable : 4725)		// Pentium fdiv
+bug
 
-#pragma warning(disable : 4786)		// Identifier was truncated and cannot be debugged.
+#pragma warning(disable : 4786)		// Identifier was truncated and cannot
+be debugged.
 
-#pragma warning(disable : 4675)		// resolved overload was found by argument-dependent lookup
+#pragma warning(disable : 4675)		// resolved overload was found by
+argument-dependent lookup
 */

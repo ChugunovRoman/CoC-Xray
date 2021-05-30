@@ -8,28 +8,25 @@
 #ifndef SMART_COVER_STORAGE_H_INCLUDED
 #define SMART_COVER_STORAGE_H_INCLUDED
 
-#include <boost/noncopyable.hpp>
 #include "smart_cover.h"
+#include <boost/noncopyable.hpp>
 
 namespace smart_cover {
 
-class storage : 
-	private debug::make_final<storage>, 
-	private boost::noncopyable 
-{
+class storage : private debug::make_final<storage>, private boost::noncopyable {
 public:
-	typedef xr_vector<smart_cover::description*>		Descriptions;
-	typedef cover::DescriptionPtr						DescriptionPtr;
+  typedef xr_vector<smart_cover::description *> Descriptions;
+  typedef cover::DescriptionPtr DescriptionPtr;
 
 private:
-	Descriptions	m_descriptions;
+  Descriptions m_descriptions;
 
 public:
-							~storage		();
-			DescriptionPtr	description		(shared_str const &table_id);
-			void			collect_garbage	();
+  ~storage();
+  DescriptionPtr description(shared_str const &table_id);
+  void collect_garbage();
 };
 
-} //namespace smart_cover
+} // namespace smart_cover
 
-#endif //SMART_COVER_STORAGE_H_INCLUDED
+#endif // SMART_COVER_STORAGE_H_INCLUDED

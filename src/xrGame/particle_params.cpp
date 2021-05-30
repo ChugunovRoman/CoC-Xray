@@ -6,9 +6,7 @@
 //	Description : Particle parameters class
 ////////////////////////////////////////////////////////////////////////////
 
-#include "stdafx.h"
 #include "particle_params.h"
+#include "stdafx.h"
 
-CParticleParams::~CParticleParams	()
-{
-}
+CParticleParams::~CParticleParams() {}

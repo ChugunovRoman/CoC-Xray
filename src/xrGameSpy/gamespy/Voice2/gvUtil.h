@@ -12,14 +12,15 @@ http://gamespy.net
 #ifndef _GV_UTIL_H_
 #define _GV_UTIL_H_
 
-#include "gvMain.h"
 #include "gvCodec.h"
+#include "gvMain.h"
 
 // gets the volume for a set of samples
-GVScalar gviGetSamplesVolume(const GVSample * samplesPtr, int numSamples);
+GVScalar gviGetSamplesVolume(const GVSample *samplesPtr, int numSamples);
 
 // checks if any samples in the set are above the given threshold
-GVBool gviIsOverThreshold(const GVSample * samplesPtr, int numSamples, GVScalar threshold);
+GVBool gviIsOverThreshold(const GVSample *samplesPtr, int numSamples,
+                          GVScalar threshold);
 
 // returns the lowest multiple of base that is >= value
 int gviRoundUpToNearestMultiple(int value, int base);

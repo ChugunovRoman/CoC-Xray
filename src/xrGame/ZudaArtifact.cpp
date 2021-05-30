@@ -3,20 +3,12 @@
 // ZudaArtefact - артефакт "зуда"
 ///////////////////////////////////////////////////////////////
 
-#include "stdafx.h"
 #include "ZudaArtifact.h"
 #include "../xrphysics/PhysicsShell.h"
+#include "stdafx.h"
 
+CZudaArtefact::CZudaArtefact(void) {}
 
-CZudaArtefact::CZudaArtefact(void) 
-{
-}
+CZudaArtefact::~CZudaArtefact(void) {}
 
-CZudaArtefact::~CZudaArtefact(void) 
-{
-}
-
-void CZudaArtefact::Load(LPCSTR section) 
-{
-	inherited::Load(section);
-}
+void CZudaArtefact::Load(LPCSTR section) { inherited::Load(section); }

@@ -1,5 +1,5 @@
 // Copyright NVIDIA Corporation 2007 -- Ignacio Castano <icastano@nvidia.com>
-// 
+//
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
 // files (the "Software"), to deal in the Software without
@@ -8,10 +8,10 @@
 // copies of the Software, and to permit persons to whom the
 // Software is furnished to do so, subject to the following
 // conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
 // OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -24,16 +24,15 @@
 #ifndef NV_IMAGE_CONEMAP_H
 #define NV_IMAGE_CONEMAP_H
 
-#include <nvmath/Vector.h>
 #include <nvimage/nvimage.h>
+#include <nvmath/Vector.h>
 
-namespace nv
-{
-	class Image;
-	class FloatImage;
+namespace nv {
+class Image;
+class FloatImage;
 
-	FloatImage * createConeMap(const Image * img, Vector4::Arg heightWeights);
+FloatImage *createConeMap(const Image *img, Vector4::Arg heightWeights);
 
-} // nv namespace
+} // namespace nv
 
 #endif // NV_IMAGE_CONEMAP_H

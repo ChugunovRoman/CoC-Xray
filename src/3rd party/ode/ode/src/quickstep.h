@@ -25,9 +25,7 @@
 
 #include <ode/common.h>
 
-
-void dxQuickStepper (dxWorld *world, dxBody * const *body, int nb,
-		     dxJoint **joint, int nj, dReal stepsize);
-
+void dxQuickStepper(dxWorld *world, dxBody *const *body, int nb,
+                    dxJoint **joint, int nj, dReal stepsize);
 
 #endif

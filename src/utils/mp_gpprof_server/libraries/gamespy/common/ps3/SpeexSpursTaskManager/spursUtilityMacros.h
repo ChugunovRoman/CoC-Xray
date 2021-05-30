@@ -13,7 +13,7 @@
 
 // Hope we never switch away from 32 bits...
 // But this is here just in case...
-//NX_COMPILE_TIME_ASSERT(sizeof(void *)==sizeof(CELL_PPU_PTR_TYPE));
+// NX_COMPILE_TIME_ASSERT(sizeof(void *)==sizeof(CELL_PPU_PTR_TYPE));
 #endif // __SPU__
 #endif // CELL_PPU_POINTER
 

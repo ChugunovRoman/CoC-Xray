@@ -9,16 +9,13 @@
 #pragma resource "*.dfm"
 TNewEffectDialog *NewEffectDialog;
 //---------------------------------------------------------------------------
-__fastcall TNewEffectDialog::TNewEffectDialog(TComponent* Owner)
-    : TForm(Owner)
-{
-}
+__fastcall TNewEffectDialog::TNewEffectDialog(TComponent *Owner)
+    : TForm(Owner) {}
 //---------------------------------------------------------------------------
-void __fastcall TNewEffectDialog::TimeChange(TObject *Sender)
-{
-    if (Time->Value > 0.0f)
-       Button1->Enabled = true;
-    else
-       Button1->Enabled = false;
+void __fastcall TNewEffectDialog::TimeChange(TObject *Sender) {
+  if (Time->Value > 0.0f)
+    Button1->Enabled = true;
+  else
+    Button1->Enabled = false;
 }
 //---------------------------------------------------------------------------

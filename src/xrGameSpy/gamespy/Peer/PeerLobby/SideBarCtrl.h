@@ -10,42 +10,42 @@
 /////////////////////////////////////////////////////////////////////////////
 // CSideBarCtrl window
 
-class CSideBarCtrl : public CStatic
-{
-// Construction
+class CSideBarCtrl : public CStatic {
+  // Construction
 public:
-	CSideBarCtrl();
+  CSideBarCtrl();
 
-// Attributes
+  // Attributes
 public:
-
-// Operations
+  // Operations
 public:
+  // Overrides
+  // ClassWizard generated virtual function overrides
+  //{{AFX_VIRTUAL(CSideBarCtrl)
+  //}}AFX_VIRTUAL
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CSideBarCtrl)
-	//}}AFX_VIRTUAL
-
-// Implementation
+  // Implementation
 public:
-	virtual ~CSideBarCtrl();
+  virtual ~CSideBarCtrl();
 
-	// Generated message map functions
+  // Generated message map functions
 protected:
-	//{{AFX_MSG(CSideBarCtrl)
-	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
-	afx_msg void OnPaint();
-	//}}AFX_MSG
+  //{{AFX_MSG(CSideBarCtrl)
+  afx_msg BOOL OnEraseBkgnd(CDC *pDC);
+  afx_msg void OnPaint();
+  //}}AFX_MSG
 
-	void DrawGradient(CDC* pDC, const CRect &rcGrad, COLORREF clrStart, COLORREF clrEnd, BOOL bVertical, COLORREF clrDither = 0xFFFFFFFF );
+  void DrawGradient(CDC *pDC, const CRect &rcGrad, COLORREF clrStart,
+                    COLORREF clrEnd, BOOL bVertical,
+                    COLORREF clrDither = 0xFFFFFFFF);
 
-	DECLARE_MESSAGE_MAP()
+  DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////
 
 //{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+// Microsoft Visual C++ will insert additional declarations immediately before
+// the previous line.
 
 #endif // !defined(AFX_SIDEBARCTRL_H__CC0DCA41_C330_11D5_A480_000102C2601F__INCLUDED_)

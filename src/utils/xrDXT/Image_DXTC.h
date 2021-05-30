@@ -20,54 +20,52 @@ function is called.  Output of timing test is saved to a local .txt file.
 
 #pragma once
 
-#include <dds\ddsTypes.h>
 #include "dds.h"
+#include <dds\ddsTypes.h>
 
-//struct TimingInfo; // defined in Image_DXTC.cpp
+// struct TimingInfo; // defined in Image_DXTC.cpp
 
-enum PixFormat
-{
-    PF_ARGB,
-    PF_DXT1,
-    PF_DXT2,
-    PF_DXT3,
-    PF_DXT4,
-    PF_DXT5,
-    PF_UNKNOWN
+enum PixFormat {
+  PF_ARGB,
+  PF_DXT1,
+  PF_DXT2,
+  PF_DXT3,
+  PF_DXT4,
+  PF_DXT5,
+  PF_UNKNOWN
 };
 
-class Image_DXTC
-{
-    BYTE* m_pCompBytes; // compressed image bytes
-    BYTE* m_pDecompBytes;
-    int m_nCompSize;
-    int m_nCompLineSz;
-    string256 m_strFormat;
-    PixFormat m_CompFormat;
-    DDS_HEADER m_DDSD; // read from dds file
-    bool m_bMipTexture; // texture has mipmaps?
-    int m_nWidth; // in pixels of uncompressed image 
-    int m_nHeight;
+class Image_DXTC {
+  BYTE *m_pCompBytes; // compressed image bytes
+  BYTE *m_pDecompBytes;
+  int m_nCompSize;
+  int m_nCompLineSz;
+  string256 m_strFormat;
+  PixFormat m_CompFormat;
+  DDS_HEADER m_DDSD;  // read from dds file
+  bool m_bMipTexture; // texture has mipmaps?
+  int m_nWidth;       // in pixels of uncompressed image
+  int m_nHeight;
 
 private:
-    void DecompressDXT1();
-    void DecompressDXT2();
-    void DecompressDXT3();
-    void DecompressDXT4();
-    void DecompressDXT5();
-    void DecodePixelFormat(LPSTR strPixelFormat, DDS_PIXELFORMAT* pddpf);
-    void AllocateDecompBytes();
+  void DecompressDXT1();
+  void DecompressDXT2();
+  void DecompressDXT3();
+  void DecompressDXT4();
+  void DecompressDXT5();
+  void DecodePixelFormat(LPSTR strPixelFormat, DDS_PIXELFORMAT *pddpf);
+  void AllocateDecompBytes();
 
 public:
-    Image_DXTC();
-    virtual ~Image_DXTC();
+  Image_DXTC();
+  virtual ~Image_DXTC();
 
-    bool LoadFromFile(LPCSTR filename); // true if success
-    void Decompress();
-    void SaveAsRaw(); // save decompressed bits
-    BYTE* GetCompDataPointer() { return m_pCompBytes; };
-    BYTE* GetDecompDataPointer() { return m_pDecompBytes; };
-    int Width() { return m_nWidth; }
-    int Height() { return m_nHeight; }
-    bool MipTexture() { return m_bMipTexture; }
+  bool LoadFromFile(LPCSTR filename); // true if success
+  void Decompress();
+  void SaveAsRaw(); // save decompressed bits
+  BYTE *GetCompDataPointer() { return m_pCompBytes; };
+  BYTE *GetDecompDataPointer() { return m_pDecompBytes; };
+  int Width() { return m_nWidth; }
+  int Height() { return m_nHeight; }
+  bool MipTexture() { return m_bMipTexture; }
 };

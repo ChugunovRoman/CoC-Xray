@@ -10,7 +10,7 @@
  * are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer. 
+ *    notice, this list of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in
@@ -55,12 +55,11 @@
  * Hudson (tjh@cryptsoft.com).
  *
  */
-#include <stdio.h>
 #include <openssl/asn1.h>
 #include <openssl/asn1t.h>
+#include <stdio.h>
 
 /* Declarations for string types */
-
 
 IMPLEMENT_ASN1_TYPE(ASN1_INTEGER)
 IMPLEMENT_ASN1_FUNCTIONS(ASN1_INTEGER)
@@ -116,22 +115,25 @@ IMPLEMENT_ASN1_TYPE(ASN1_SEQUENCE)
 
 IMPLEMENT_ASN1_FUNCTIONS_fname(ASN1_TYPE, ASN1_ANY, ASN1_TYPE)
 
-/* Multistring types */
+    /* Multistring types */
 
-IMPLEMENT_ASN1_MSTRING(ASN1_PRINTABLE, B_ASN1_PRINTABLE)
-IMPLEMENT_ASN1_FUNCTIONS_name(ASN1_STRING, ASN1_PRINTABLE)
+    IMPLEMENT_ASN1_MSTRING(ASN1_PRINTABLE, B_ASN1_PRINTABLE)
+        IMPLEMENT_ASN1_FUNCTIONS_name(ASN1_STRING, ASN1_PRINTABLE)
 
-IMPLEMENT_ASN1_MSTRING(DISPLAYTEXT, B_ASN1_DISPLAYTEXT)
-IMPLEMENT_ASN1_FUNCTIONS_name(ASN1_STRING, DISPLAYTEXT)
+            IMPLEMENT_ASN1_MSTRING(DISPLAYTEXT, B_ASN1_DISPLAYTEXT)
+                IMPLEMENT_ASN1_FUNCTIONS_name(ASN1_STRING, DISPLAYTEXT)
 
-IMPLEMENT_ASN1_MSTRING(DIRECTORYSTRING, B_ASN1_DIRECTORYSTRING)
-IMPLEMENT_ASN1_FUNCTIONS_name(ASN1_STRING, DIRECTORYSTRING)
+                    IMPLEMENT_ASN1_MSTRING(DIRECTORYSTRING,
+                                           B_ASN1_DIRECTORYSTRING)
+                        IMPLEMENT_ASN1_FUNCTIONS_name(ASN1_STRING,
+                                                      DIRECTORYSTRING)
 
-/* Three separate BOOLEAN type: normal, DEFAULT TRUE and DEFAULT FALSE */
-IMPLEMENT_ASN1_TYPE_ex(ASN1_BOOLEAN, ASN1_BOOLEAN, -1)
-IMPLEMENT_ASN1_TYPE_ex(ASN1_TBOOLEAN, ASN1_BOOLEAN, 1)
-IMPLEMENT_ASN1_TYPE_ex(ASN1_FBOOLEAN, ASN1_BOOLEAN, 0)
+    /* Three separate BOOLEAN type: normal, DEFAULT TRUE and DEFAULT FALSE */
+    IMPLEMENT_ASN1_TYPE_ex(ASN1_BOOLEAN, ASN1_BOOLEAN, -1)
+        IMPLEMENT_ASN1_TYPE_ex(ASN1_TBOOLEAN, ASN1_BOOLEAN, 1)
+            IMPLEMENT_ASN1_TYPE_ex(ASN1_FBOOLEAN, ASN1_BOOLEAN, 0)
 
-/* Special, OCTET STRING with indefinite length constructed support */
+    /* Special, OCTET STRING with indefinite length constructed support */
 
-IMPLEMENT_ASN1_TYPE_ex(ASN1_OCTET_STRING_NDEF, ASN1_OCTET_STRING, ASN1_TFLG_NDEF)
+    IMPLEMENT_ASN1_TYPE_ex(ASN1_OCTET_STRING_NDEF, ASN1_OCTET_STRING,
+                           ASN1_TFLG_NDEF)

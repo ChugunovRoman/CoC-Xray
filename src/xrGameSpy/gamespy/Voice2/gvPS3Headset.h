@@ -15,7 +15,8 @@ GVBool gviPS3HeadsetStartup(void);
 void gviPS3HeadsetCleanup(void);
 void gviPS3HeadsetThink(void);
 
-int gviPS3HeadsetListDevices(GVDeviceInfo devices[], int maxDevices, GVDeviceType types);
+int gviPS3HeadsetListDevices(GVDeviceInfo devices[], int maxDevices,
+                             GVDeviceType types);
 
 GVDevice gviPS3HeadsetNewDevice(GVDeviceID deviceID, GVDeviceType type);
 

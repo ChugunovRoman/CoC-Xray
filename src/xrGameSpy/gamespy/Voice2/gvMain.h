@@ -12,7 +12,7 @@ http://gamespy.net
 #ifndef _GV_MAIN_H_
 #define _GV_MAIN_H_
 
-#include "gv.h"
 #include "../darray.h"
+#include "gv.h"
 
 #endif

@@ -2,8 +2,8 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "stdafx.h"
 #include "xrXRC.h"
+#include "stdafx.h"
 
 ENGINE_API xrXRC XRC;
 
@@ -11,12 +11,6 @@ ENGINE_API xrXRC XRC;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-xrXRC::xrXRC()
-{
+xrXRC::xrXRC() {}
 
-}
-
-xrXRC::~xrXRC()
-{
-
-}
+xrXRC::~xrXRC() {}

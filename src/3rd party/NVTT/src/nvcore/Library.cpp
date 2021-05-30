@@ -10,32 +10,27 @@
 #include <dlfcn.h>
 #endif
 
-
-
-void * nvLoadLibrary(const char * name)
-{
+void *nvLoadLibrary(const char *name) {
 #if NV_OS_WIN32
-	return (void *)LoadLibraryExA( name, NULL, 0 );
+  return (void *)LoadLibraryExA(name, NULL, 0);
 #else
-	return dlopen(name, RTLD_LAZY);
+  return dlopen(name, RTLD_LAZY);
 #endif
 }
 
-void nvUnloadLibrary(void * handle)
-{
-	nvDebugCheck(handle != NULL);
+void nvUnloadLibrary(void *handle) {
+  nvDebugCheck(handle != NULL);
 #if NV_OS_WIN32
-	FreeLibrary((HMODULE)handle);
+  FreeLibrary((HMODULE)handle);
 #else
-	dlclose(handle);
+  dlclose(handle);
 #endif
 }
 
-void * nvBindSymbol(void * handle, const char * symbol)
-{
+void *nvBindSymbol(void *handle, const char *symbol) {
 #if NV_OS_WIN32
-	return (void *)GetProcAddress((HMODULE)handle, symbol);
+  return (void *)GetProcAddress((HMODULE)handle, symbol);
 #else
-	return (void *)dlsym(handle, symbol);
-#endif	
+  return (void *)dlsym(handle, symbol);
+#endif
 }

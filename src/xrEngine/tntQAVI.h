@@ -4,11 +4,11 @@
 #include <math.h>
 
 //#include "tntTimer.h"
-#include "vfw.h"
 #include "mmsystem.h"
+#include "vfw.h"
 
 // replaced with standard AVIIF_KEYFRAME
-//rr #define AVIINDEX_ISKEYFRAME 0x10 // ключевой кадр
+// rr #define AVIINDEX_ISKEYFRAME 0x10 // ключевой кадр
 
 // reverse enginered AVI index v.1 format
 /*struct AviIndex {
@@ -36,69 +36,66 @@
  RECT rcFrame;
  } AVIStreamHeader;
  */
-typedef struct
-{
-    FOURCC fccType;
-    FOURCC fccHandler;
-    DWORD dwFlags;
-    DWORD dwPriority;
-    DWORD dwInitialFrames;
-    DWORD dwScale;
-    DWORD dwRate;
-    DWORD dwStart;
-    DWORD dwLength;
-    DWORD dwSuggestedBufferSize;
-    DWORD dwQuality;
-    DWORD dwSampleSize;
-    struct
-    {
+typedef struct {
+  FOURCC fccType;
+  FOURCC fccHandler;
+  DWORD dwFlags;
+  DWORD dwPriority;
+  DWORD dwInitialFrames;
+  DWORD dwScale;
+  DWORD dwRate;
+  DWORD dwStart;
+  DWORD dwLength;
+  DWORD dwSuggestedBufferSize;
+  DWORD dwQuality;
+  DWORD dwSampleSize;
+  struct {
 
-        WORD left;
-        WORD top;
-        WORD right;
-        WORD bottom;
-    };
-    // RECT rcFrame; - лажа в MSDN
+    WORD left;
+    WORD top;
+    WORD right;
+    WORD bottom;
+  };
+  // RECT rcFrame; - лажа в MSDN
 } AVIStreamHeaderCustom;
 
-class ENGINE_API CAviPlayerCustom
-{
+class ENGINE_API CAviPlayerCustom {
 protected:
-    CAviPlayerCustom* alpha;
+  CAviPlayerCustom *alpha;
+
 protected:
-    AVIINDEXENTRY* m_pMovieIndex;
-    BYTE* m_pMovieData;
-    HIC m_aviIC;
-    BYTE* m_pDecompressedBuf;
+  AVIINDEXENTRY *m_pMovieIndex;
+  BYTE *m_pMovieData;
+  HIC m_aviIC;
+  BYTE *m_pDecompressedBuf;
 
-    BITMAPINFOHEADER m_biOutFormat;
-    BITMAPINFOHEADER m_biInFormat;
+  BITMAPINFOHEADER m_biOutFormat;
+  BITMAPINFOHEADER m_biInFormat;
 
-    float m_fRate; // стандартная скорость, fps
-    float m_fCurrentRate; // текущая скорость, fps
+  float m_fRate;        // стандартная скорость, fps
+  float m_fCurrentRate; // текущая скорость, fps
 
-    DWORD m_dwFrameTotal;
-    DWORD m_dwFrameCurrent;
-    u32 m_dwFirstFrameOffset;
+  DWORD m_dwFrameTotal;
+  DWORD m_dwFrameCurrent;
+  u32 m_dwFirstFrameOffset;
 
+  DWORD CalcFrame();
 
-    DWORD CalcFrame();
-
-    BOOL DecompressFrame(DWORD dwFrameNum);
-    VOID PreRoll(DWORD dwFrameNum);
+  BOOL DecompressFrame(DWORD dwFrameNum);
+  VOID PreRoll(DWORD dwFrameNum);
 
 public:
-    CAviPlayerCustom();
-    ~CAviPlayerCustom();
+  CAviPlayerCustom();
+  ~CAviPlayerCustom();
 
-    DWORD m_dwWidth, m_dwHeight;
+  DWORD m_dwWidth, m_dwHeight;
 
-    VOID GetSize(DWORD* dwWidth, DWORD* dwHeight);
+  VOID GetSize(DWORD *dwWidth, DWORD *dwHeight);
 
-    BOOL Load(char* fname);
-    BOOL GetFrame(BYTE** pDest);
+  BOOL Load(char *fname);
+  BOOL GetFrame(BYTE **pDest);
 
-    BOOL NeedUpdate() { return CalcFrame() != m_dwFrameCurrent; }
-    INT SetSpeed(INT nPercent);
+  BOOL NeedUpdate() { return CalcFrame() != m_dwFrameCurrent; }
+  INT SetSpeed(INT nPercent);
 };
 #endif

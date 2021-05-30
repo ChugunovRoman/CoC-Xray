@@ -1,5 +1,5 @@
 /*
-GameSpy Chat SDK 
+GameSpy Chat SDK
 Dan "Mr. Pants" Schoenblum
 dan@gamespy.com
 
@@ -20,77 +20,68 @@ devsupport@gamespy.com
 /**********
 ** ENUMS **
 **********/
-typedef enum ciConnectState
-{
-	ciNotConnected,
-	ciConnected,
-	ciDisconnected
+typedef enum ciConnectState {
+  ciNotConnected,
+  ciConnected,
+  ciDisconnected
 } ciConnectState;
 
 /**********
 ** TYPES **
 **********/
-typedef struct ciBuffer
-{
-	char * buffer;
-	int length;
-	int size;
+typedef struct ciBuffer {
+  char *buffer;
+  int length;
+  int size;
 } ciBuffer;
 
-typedef struct ciServerMessage
-{
-	char * message;
-	char * server;
-	char * nick;
-	char * user;
-	char * host;
-	char * command;
-	char * middle;
-	char * param;
-	char ** params;
-	int numParams;
+typedef struct ciServerMessage {
+  char *message;
+  char *server;
+  char *nick;
+  char *user;
+  char *host;
+  char *command;
+  char *middle;
+  char *param;
+  char **params;
+  int numParams;
 } ciServerMessage;
 
-typedef struct ciSocket
-{
-	SOCKET sock;
-	ciConnectState connectState;
-	char serverAddress[256];
+typedef struct ciSocket {
+  SOCKET sock;
+  ciConnectState connectState;
+  char serverAddress[256];
 
-	ciBuffer inputQueue;
-	ciBuffer outputQueue;
+  ciBuffer inputQueue;
+  ciBuffer outputQueue;
 
-	CHATBool secure;
-	gs_crypt_key inKey;
-	gs_crypt_key outKey;
+  CHATBool secure;
+  gs_crypt_key inKey;
+  gs_crypt_key outKey;
 
-	ciServerMessage lastMessage;
+  ciServerMessage lastMessage;
 
 #ifdef IRC_LOG
-	char filename[FILENAME_MAX];
+  char filename[FILENAME_MAX];
 #endif
 } ciSocket;
 
 /**************
 ** FUNCTIONS **
 **************/
-CHATBool ciSocketInit(ciSocket * sock, const char * nick);
+CHATBool ciSocketInit(ciSocket *sock, const char *nick);
 
-CHATBool ciSocketConnect(ciSocket * sock,
-					 const char * serverAddress,
-					 int port);
+CHATBool ciSocketConnect(ciSocket *sock, const char *serverAddress, int port);
 
-void ciSocketDisconnect(ciSocket * sock);
+void ciSocketDisconnect(ciSocket *sock);
 
-void ciSocketThink(ciSocket * sock);
+void ciSocketThink(ciSocket *sock);
 
-CHATBool ciSocketSend(ciSocket * sock,
-				  const char * buffer);
+CHATBool ciSocketSend(ciSocket *sock, const char *buffer);
 
-CHATBool ciSocketSendf(ciSocket * sock,
-				   const char * format,
-				   ...);
+CHATBool ciSocketSendf(ciSocket *sock, const char *format, ...);
 
-ciServerMessage * ciSocketRecv(ciSocket * sock);
+ciServerMessage *ciSocketRecv(ciSocket *sock);
 
 #endif

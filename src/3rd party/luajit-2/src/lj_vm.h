@@ -13,7 +13,7 @@ LJ_ASMF void lj_vm_call(lua_State *L, TValue *base, int nres1);
 LJ_ASMF int lj_vm_pcall(lua_State *L, TValue *base, int nres1, ptrdiff_t ef);
 typedef TValue *(*lua_CPFunction)(lua_State *L, lua_CFunction func, void *ud);
 LJ_ASMF int lj_vm_cpcall(lua_State *L, lua_CFunction func, void *ud,
-			 lua_CPFunction cp);
+                         lua_CPFunction cp);
 LJ_ASMF int lj_vm_resume(lua_State *L, TValue *base, int nres1, ptrdiff_t ef);
 LJ_ASMF_NORET void LJ_FASTCALL lj_vm_unwind_c(void *cframe, int errcode);
 LJ_ASMF_NORET void LJ_FASTCALL lj_vm_unwind_ff(void *cframe);
@@ -50,8 +50,8 @@ LJ_ASMF void lj_vm_exit_interp(void);
 
 /* Internal math helper functions. */
 #if LJ_TARGET_X86ORX64 || LJ_TARGET_PPC
-#define lj_vm_floor	floor
-#define lj_vm_ceil	ceil
+#define lj_vm_floor floor
+#define lj_vm_ceil ceil
 #else
 LJ_ASMF double lj_vm_floor(double);
 LJ_ASMF double lj_vm_ceil(double);
@@ -63,7 +63,7 @@ LJ_ASMF double lj_vm_ceil_sf(double);
 #if defined(LUAJIT_NO_LOG2) || LJ_TARGET_X86ORX64
 LJ_ASMF double lj_vm_log2(double);
 #else
-#define lj_vm_log2	log2
+#define lj_vm_log2 log2
 #endif
 
 #if LJ_HASJIT
@@ -77,7 +77,7 @@ LJ_ASMF void lj_vm_pow_sse(void);
 LJ_ASMF void lj_vm_powi_sse(void);
 #else
 #if LJ_TARGET_PPC
-#define lj_vm_trunc	trunc
+#define lj_vm_trunc trunc
 #else
 LJ_ASMF double lj_vm_trunc(double);
 #if LJ_TARGET_ARM
@@ -88,7 +88,7 @@ LJ_ASMF double lj_vm_powi(double, int32_t);
 #ifdef LUAJIT_NO_EXP2
 LJ_ASMF double lj_vm_exp2(double);
 #else
-#define lj_vm_exp2	exp2
+#define lj_vm_exp2 exp2
 #endif
 #endif
 LJ_ASMF int32_t LJ_FASTCALL lj_vm_modi(int32_t, int32_t);
@@ -98,19 +98,19 @@ LJ_ASMF int lj_vm_errno(void);
 #endif
 
 /* Continuations for metamethods. */
-LJ_ASMF void lj_cont_cat(void);  /* Continue with concatenation. */
-LJ_ASMF void lj_cont_ra(void);  /* Store result in RA from instruction. */
-LJ_ASMF void lj_cont_nop(void);  /* Do nothing, just continue execution. */
-LJ_ASMF void lj_cont_condt(void);  /* Branch if result is true. */
-LJ_ASMF void lj_cont_condf(void);  /* Branch if result is false. */
+LJ_ASMF void lj_cont_cat(void);   /* Continue with concatenation. */
+LJ_ASMF void lj_cont_ra(void);    /* Store result in RA from instruction. */
+LJ_ASMF void lj_cont_nop(void);   /* Do nothing, just continue execution. */
+LJ_ASMF void lj_cont_condt(void); /* Branch if result is true. */
+LJ_ASMF void lj_cont_condf(void); /* Branch if result is false. */
 LJ_ASMF void lj_cont_hook(void);  /* Continue from hook yield. */
 
-enum { LJ_CONT_TAILCALL, LJ_CONT_FFI_CALLBACK };  /* Special continuations. */
+enum { LJ_CONT_TAILCALL, LJ_CONT_FFI_CALLBACK }; /* Special continuations. */
 
 /* Start of the ASM code. */
 LJ_ASMF char lj_vm_asm_begin[];
 
 /* Bytecode offsets are relative to lj_vm_asm_begin. */
-#define makeasmfunc(ofs)	((ASMFunction)(lj_vm_asm_begin + (ofs)))
+#define makeasmfunc(ofs) ((ASMFunction)(lj_vm_asm_begin + (ofs)))
 
 #endif

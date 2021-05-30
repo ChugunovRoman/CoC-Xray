@@ -5,13 +5,9 @@
 
 #include "stdafx.h"
 
-#include "medkit.h"
 #include "../xrphysics/PhysicsShell.h"
+#include "medkit.h"
 
-CMedkit::CMedkit() 
-{
-}
+CMedkit::CMedkit() {}
 
-CMedkit::~CMedkit() 
-{
-}
+CMedkit::~CMedkit() {}

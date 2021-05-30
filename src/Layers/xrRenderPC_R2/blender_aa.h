@@ -1,14 +1,13 @@
 #pragma once
 
-class CBlender_FXAA : public IBlender
-{
+class CBlender_FXAA : public IBlender {
 public:
-	virtual		LPCSTR		getComment()	{ return "FXAA"; }
-	virtual		BOOL		canBeDetailed()	{ return FALSE; }
-	virtual		BOOL		canBeLMAPped()	{ return FALSE; }
+  virtual LPCSTR getComment() { return "FXAA"; }
+  virtual BOOL canBeDetailed() { return FALSE; }
+  virtual BOOL canBeLMAPped() { return FALSE; }
 
-	virtual		void		Compile(CBlender_Compile& C);
+  virtual void Compile(CBlender_Compile &C);
 
-	CBlender_FXAA();
-	virtual ~CBlender_FXAA();
+  CBlender_FXAA();
+  virtual ~CBlender_FXAA();
 };

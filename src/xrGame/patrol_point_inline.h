@@ -8,53 +8,53 @@
 
 #pragma once
 
-IC	const Fvector &CPatrolPoint::position						() const
-{
+IC const Fvector &CPatrolPoint::position() const {
 #ifdef DEBUG
-	VERIFY(m_initialized);
+  VERIFY(m_initialized);
 #endif
-	return				(m_position);
+  return (m_position);
 }
 
-IC	const u32 &CPatrolPoint::flags								() const
-{
+IC const u32 &CPatrolPoint::flags() const {
 #ifdef DEBUG
-	VERIFY(m_initialized);
+  VERIFY(m_initialized);
 #endif
-	return				(m_flags);
+  return (m_flags);
 }
 
-IC	const shared_str &CPatrolPoint::name						() const
-{
+IC const shared_str &CPatrolPoint::name() const {
 #ifdef DEBUG
-	VERIFY(m_initialized);
+  VERIFY(m_initialized);
 #endif
-	return				(m_name);
+  return (m_name);
 }
 
-IC	const u32 &CPatrolPoint::level_vertex_id					(const CLevelGraph *level_graph, const CGameLevelCrossTable *cross, const CGameGraph *game_graph) const
-{
+IC const u32 &
+CPatrolPoint::level_vertex_id(const CLevelGraph *level_graph,
+                              const CGameLevelCrossTable *cross,
+                              const CGameGraph *game_graph) const {
 #ifdef DEBUG
-	VERIFY(m_initialized);
-	verify_vertex_id	(level_graph,cross,game_graph);
+  VERIFY(m_initialized);
+  verify_vertex_id(level_graph, cross, game_graph);
 #endif
-	return				(m_level_vertex_id);
+  return (m_level_vertex_id);
 }
 
-IC	const GameGraph::_GRAPH_ID &CPatrolPoint::game_vertex_id	(const CLevelGraph *level_graph, const CGameLevelCrossTable *cross, const CGameGraph *game_graph) const
-{
+IC const GameGraph::_GRAPH_ID &
+CPatrolPoint::game_vertex_id(const CLevelGraph *level_graph,
+                             const CGameLevelCrossTable *cross,
+                             const CGameGraph *game_graph) const {
 #ifdef DEBUG
-	VERIFY(m_initialized);
-	verify_vertex_id	(level_graph,cross,game_graph);
+  VERIFY(m_initialized);
+  verify_vertex_id(level_graph, cross, game_graph);
 #endif
-	return				(m_game_vertex_id);
+  return (m_game_vertex_id);
 }
 
 #ifdef DEBUG
-IC	void CPatrolPoint::path										(const CPatrolPath *path)
-{
-	VERIFY				(path);
-	VERIFY				(!m_path);
-	m_path				= path;
+IC void CPatrolPoint::path(const CPatrolPath *path) {
+  VERIFY(path);
+  VERIFY(!m_path);
+  m_path = path;
 }
 #endif

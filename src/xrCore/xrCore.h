@@ -3,32 +3,36 @@
 #pragma once
 
 #ifndef DEBUG
-# define MASTER_GOLD
+#define MASTER_GOLD
 #endif // DEBUG
 
 //#define BENCHMARK_BUILD
 
 #ifdef BENCHMARK_BUILD
-# define BENCH_SEC_CALLCONV __stdcall
-# define BENCH_SEC_SCRAMBLEVTBL1 virtual int GetFlags() { return 1;}
-# define BENCH_SEC_SCRAMBLEVTBL2 virtual void* GetData() { return 0;}
-# define BENCH_SEC_SCRAMBLEVTBL3 virtual void* GetCache(){ return 0;}
-# define BENCH_SEC_SIGN , void *pBenchScrampleVoid = 0
-# define BENCH_SEC_SCRAMBLEMEMBER1 float m_fSrambleMember1;
-# define BENCH_SEC_SCRAMBLEMEMBER2 float m_fSrambleMember2;
+#define BENCH_SEC_CALLCONV __stdcall
+#define BENCH_SEC_SCRAMBLEVTBL1                                                \
+  virtual int GetFlags() { return 1; }
+#define BENCH_SEC_SCRAMBLEVTBL2                                                \
+  virtual void *GetData() { return 0; }
+#define BENCH_SEC_SCRAMBLEVTBL3                                                \
+  virtual void *GetCache() { return 0; }
+#define BENCH_SEC_SIGN , void *pBenchScrampleVoid = 0
+#define BENCH_SEC_SCRAMBLEMEMBER1 float m_fSrambleMember1;
+#define BENCH_SEC_SCRAMBLEMEMBER2 float m_fSrambleMember2;
 #else // BENCHMARK_BUILD
-# define BENCH_SEC_CALLCONV
-# define BENCH_SEC_SCRAMBLEVTBL1
-# define BENCH_SEC_SCRAMBLEVTBL2
-# define BENCH_SEC_SCRAMBLEVTBL3
-# define BENCH_SEC_SIGN
-# define BENCH_SEC_SCRAMBLEMEMBER1
-# define BENCH_SEC_SCRAMBLEMEMBER2
+#define BENCH_SEC_CALLCONV
+#define BENCH_SEC_SCRAMBLEVTBL1
+#define BENCH_SEC_SCRAMBLEVTBL2
+#define BENCH_SEC_SCRAMBLEVTBL3
+#define BENCH_SEC_SIGN
+#define BENCH_SEC_SCRAMBLEMEMBER1
+#define BENCH_SEC_SCRAMBLEMEMBER2
 #endif // BENCHMARK_BUILD
 
-#pragma warning(disable:4996)
+#pragma warning(disable : 4996)
 
-#if (defined(_DEBUG) || defined(MIXED) || defined(DEBUG)) && !defined(FORCE_NO_EXCEPTIONS)
+#if (defined(_DEBUG) || defined(MIXED) || defined(DEBUG)) &&                   \
+    !defined(FORCE_NO_EXCEPTIONS)
 // "debug" or "mixed"
 #if !defined(_CPPUNWIND)
 #error Please enable exceptions...
@@ -43,7 +47,7 @@
 #define _HAS_EXCEPTIONS 1 // STL
 #define XRAY_EXCEPTIONS 0 // XRAY
 #define LUABIND_NO_EXCEPTIONS
-#pragma warning(disable:4530)
+#pragma warning(disable : 4530)
 #endif
 
 #if !defined(_MT)
@@ -51,7 +55,7 @@
 #error Please enable multi-threaded library...
 #endif
 
-# include "xrCore_platform.h"
+#include "xrCore_platform.h"
 
 /*
 // stl-config
@@ -76,13 +80,13 @@
 // #include <exception>
 // using std::exception;
 
+#include <math.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdarg.h>
-#include <math.h>
 #include <string.h>
-#include <typeinfo.h>
 #include <thread>
+#include <typeinfo.h>
 //#include <process.h>
 
 #ifndef DEBUG
@@ -95,34 +99,37 @@
 #endif
 
 #ifdef XRCORE_STATIC
-# define NO_FS_SCAN
+#define NO_FS_SCAN
 #endif
 
 #ifdef _EDITOR
-# define NO_FS_SCAN
+#define NO_FS_SCAN
 #endif
 
 // inline control - redefine to use compiler's heuristics ONLY
 // it seems "IC" is misused in many places which cause code-bloat
 // ...and VC7.1 really don't miss opportunities for inline :)
 #ifdef _EDITOR
-# define __forceinline inline
+#define __forceinline inline
 #endif
 #define _inline inline
 #define __inline inline
 #define IC inline
-#define ICF __forceinline // !!! this should be used only in critical places found by PROFILER
+#define ICF                                                                    \
+  __forceinline // !!! this should be used only in critical places found by
+                // PROFILER
 #ifdef _EDITOR
-# define ICN
+#define ICN
 #else
-# define ICN __declspec (noinline)
+#define ICN __declspec(noinline)
 #endif
 
 #ifndef DEBUG
-#pragma inline_depth ( 254 )
-#pragma inline_recursion( on )
+#pragma inline_depth(254)
+#pragma inline_recursion(on)
 #ifndef __BORLANDC__
-#pragma intrinsic (abs, fabs, fmod, sin, cos, tan, asin, acos, atan, sqrt, exp, log, log10, strcat)
+#pragma intrinsic(abs, fabs, fmod, sin, cos, tan, asin, acos, atan, sqrt, exp, \
+                  log, log10, strcat)
 #endif
 #endif
 
@@ -162,105 +169,112 @@
 #define MODULE_NAME "xrCore.dll"
 #endif
 
-
 // Warnings
-#pragma warning (disable : 4251 ) // object needs DLL interface
-#pragma warning (disable : 4201 ) // nonstandard extension used : nameless struct/union
-#pragma warning (disable : 4100 ) // unreferenced formal parameter
-#pragma warning (disable : 4127 ) // conditional expression is constant
-//#pragma warning (disable : 4530 ) // C++ exception handler used, but unwind semantics are not enabled
-#pragma warning (disable : 4345 )
-#pragma warning (disable : 4714 ) // __forceinline not inlined
+#pragma warning(disable : 4251) // object needs DLL interface
+#pragma warning(                                                               \
+    disable : 4201) // nonstandard extension used : nameless struct/union
+#pragma warning(disable : 4100) // unreferenced formal parameter
+#pragma warning(disable : 4127) // conditional expression is constant
+//#pragma warning (disable : 4530 ) // C++ exception handler used, but unwind
+// semantics are not enabled
+#pragma warning(disable : 4345)
+#pragma warning(disable : 4714) // __forceinline not inlined
 #ifndef DEBUG
-#pragma warning (disable : 4189 ) // local variable is initialized but not refenced
-#endif // frequently in release code due to large amount of VERIFY
-
+#pragma warning(                                                               \
+    disable : 4189) // local variable is initialized but not refenced
+#endif              // frequently in release code due to large amount of VERIFY
 
 #ifdef _M_AMD64
-#pragma warning (disable : 4512 )
+#pragma warning(disable : 4512)
 #endif
 
 // stl
-#pragma warning (push)
-#pragma warning (disable:4702)
+#pragma warning(push)
+#pragma warning(disable : 4702)
 #include <algorithm>
 #include <limits>
-#include <vector>
-#include <stack>
 #include <list>
-#include <set>
 #include <map>
+#include <set>
+#include <stack>
+#include <vector>
 
 #ifndef _EDITOR
-# include <hash_map>
-# include <hash_set>
+#include <hash_map>
+#include <hash_set>
 #endif
 
 #include <string>
-#pragma warning (pop)
-#pragma warning (disable : 4100 ) // unreferenced formal parameter
+#pragma warning(pop)
+#pragma warning(disable : 4100) // unreferenced formal parameter
 
 // Our headers
 #ifdef XRCORE_STATIC
-# define XRCORE_API
+#define XRCORE_API
 #else
-# ifdef XRCORE_EXPORTS
-# define XRCORE_API __declspec(dllexport)
-# else
-# define XRCORE_API __declspec(dllimport)
-# endif
+#ifdef XRCORE_EXPORTS
+#define XRCORE_API __declspec(dllexport)
+#else
+#define XRCORE_API __declspec(dllimport)
+#endif
 #endif
 
-#include "xrDebug.h"
 #include "vector.h"
+#include "xrDebug.h"
 
 #include "clsid.h"
-#include "xrSyncronize.h"
-#include "xrMemory.h"
 #include "xrDebug.h"
+#include "xrMemory.h"
+#include "xrSyncronize.h"
 
 #include "_stl_extensions.h"
+#include "rt_compressor.h"
+#include "string_concatenations.h"
+#include "xr_resource.h"
+#include "xr_shared.h"
 #include "xrsharedmem.h"
 #include "xrstring.h"
-#include "xr_resource.h"
-#include "rt_compressor.h"
-#include "xr_shared.h"
-#include "string_concatenations.h"
 
 // stl ext
-struct XRCORE_API xr_rtoken
-{
-    shared_str name;
-    int id;
-    xr_rtoken(LPCSTR _nm, int _id) { name = _nm; id = _id; }
+struct XRCORE_API xr_rtoken {
+  shared_str name;
+  int id;
+  xr_rtoken(LPCSTR _nm, int _id) {
+    name = _nm;
+    id = _id;
+  }
+
 public:
-    void rename(LPCSTR _nm) { name = _nm; }
-    bool equal(LPCSTR _nm) { return (0 == xr_strcmp(*name, _nm)); }
+  void rename(LPCSTR _nm) { name = _nm; }
+  bool equal(LPCSTR _nm) { return (0 == xr_strcmp(*name, _nm)); }
 };
 
-#pragma pack (push,1)
-struct XRCORE_API xr_shortcut
-{
-    enum
-    {
-        flShift = 0x20,
-        flCtrl = 0x40,
-        flAlt = 0x80,
+#pragma pack(push, 1)
+struct XRCORE_API xr_shortcut {
+  enum {
+    flShift = 0x20,
+    flCtrl = 0x40,
+    flAlt = 0x80,
+  };
+  union {
+    struct {
+      u8 key;
+      Flags8 ext;
     };
-    union
-    {
-        struct
-        {
-            u8 key;
-            Flags8 ext;
-        };
-        u16 hotkey;
-    };
-    xr_shortcut(u8 k, BOOL a, BOOL c, BOOL s) :key(k) { ext.assign(u8((a ? flAlt : 0) | (c ? flCtrl : 0) | (s ? flShift : 0))); }
-    xr_shortcut() { ext.zero(); key = 0; }
-    bool similar(const xr_shortcut& v)const { return ext.equal(v.ext) && (key == v.key); }
+    u16 hotkey;
+  };
+  xr_shortcut(u8 k, BOOL a, BOOL c, BOOL s) : key(k) {
+    ext.assign(u8((a ? flAlt : 0) | (c ? flCtrl : 0) | (s ? flShift : 0)));
+  }
+  xr_shortcut() {
+    ext.zero();
+    key = 0;
+  }
+  bool similar(const xr_shortcut &v) const {
+    return ext.equal(v.ext) && (key == v.key);
+  }
 };
-#pragma pack (pop)
+#pragma pack(pop)
 
 DEFINE_VECTOR(shared_str, RStringVec, RStringVecIt);
 DEFINE_SET(shared_str, RStringSet, RStringSetIt);
@@ -270,71 +284,66 @@ DEFINE_VECTOR(xr_rtoken, RTokenVec, RTokenVecIt);
 
 #include "FS.h"
 #include "log.h"
-#include "xr_trims.h"
 #include "xr_ini.h"
+#include "xr_trims.h"
 #ifdef NO_FS_SCAN
-# include "ELocatorAPI.h"
+#include "ELocatorAPI.h"
 #else
-# include "LocatorAPI.h"
+#include "LocatorAPI.h"
 #endif
-#include "FileSystem.h"
 #include "FTimer.h"
+#include "FileSystem.h"
 #include "fastdelegate.h"
 #include "intrusive_ptr.h"
 
 #include "net_utils.h"
 
 // destructor
-template <class T>
-class destructor
-{
-    T* ptr;
+template <class T> class destructor {
+  T *ptr;
+
 public:
-    destructor(T* p) { ptr = p; }
-    ~destructor() { xr_delete(ptr); }
-    IC T& operator() ()
-    {
-        return *ptr;
-    }
+  destructor(T *p) { ptr = p; }
+  ~destructor() { xr_delete(ptr); }
+  IC T &operator()() { return *ptr; }
 };
 
 // ********************************************** The Core definition
-class XRCORE_API xrCore
-{
+class XRCORE_API xrCore {
 public:
-    string64 ApplicationName;
-    string_path ApplicationPath;
-    string_path WorkingPath;
-    string64 UserName;
-    string64 CompName;
-    char* Params;
-    DWORD dwFrame;
+  string64 ApplicationName;
+  string_path ApplicationPath;
+  string_path WorkingPath;
+  string64 UserName;
+  string64 CompName;
+  char *Params;
+  DWORD dwFrame;
 
-	Flags16 ParamFlags;				//Alun: TODO: Add all params
-	enum ParamFlag{
-		verboselog		= (1 << 0),
-		fpslock60		= (1 << 1),
-		fpslock120		= (1 << 2),
-		fpslock144		= (1 << 3),
-		fpslock240		= (1 << 4),
-		nofpslock		= (1 << 5),
-		dbgbullet		= (1 << 6),
-		genbump			= (1 << 7),
-		dev				= (1 << 8),
-	};
+  Flags16 ParamFlags; // Alun: TODO: Add all params
+  enum ParamFlag {
+    verboselog = (1 << 0),
+    fpslock60 = (1 << 1),
+    fpslock120 = (1 << 2),
+    fpslock144 = (1 << 3),
+    fpslock240 = (1 << 4),
+    nofpslock = (1 << 5),
+    dbgbullet = (1 << 6),
+    genbump = (1 << 7),
+    dev = (1 << 8),
+  };
+
 public:
-    void _initialize(LPCSTR ApplicationName, LogCallback cb = 0, BOOL init_fs = TRUE, LPCSTR fs_fname = 0);
-    void _destroy();
+  void _initialize(LPCSTR ApplicationName, LogCallback cb = 0,
+                   BOOL init_fs = TRUE, LPCSTR fs_fname = 0);
+  void _destroy();
 };
 
-//Borland class dll interface
+// Borland class dll interface
 #define _BCL __stdcall
 
-//Borland global function dll interface
+// Borland global function dll interface
 #define _BGCL __stdcall
-
 
 extern XRCORE_API xrCore Core;
 
 #endif
-

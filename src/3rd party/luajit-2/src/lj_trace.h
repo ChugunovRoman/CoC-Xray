@@ -9,12 +9,12 @@
 #include "lj_obj.h"
 
 #if LJ_HASJIT
-#include "lj_jit.h"
 #include "lj_dispatch.h"
+#include "lj_jit.h"
 
 /* Trace errors. */
 typedef enum {
-#define TREDEF(name, msg)	LJ_TRERR_##name,
+#define TREDEF(name, msg) LJ_TRERR_##name,
 #include "lj_traceerr.h"
   LJ_TRERR__MAX
 } TraceError;
@@ -37,16 +37,16 @@ LJ_FUNCA void LJ_FASTCALL lj_trace_hot(jit_State *J, const BCIns *pc);
 LJ_FUNCA int LJ_FASTCALL lj_trace_exit(jit_State *J, void *exptr);
 
 /* Signal asynchronous abort of trace or end of trace. */
-#define lj_trace_abort(g)	(G2J(g)->state &= ~LJ_TRACE_ACTIVE)
-#define lj_trace_end(J)		(J->state = LJ_TRACE_END)
+#define lj_trace_abort(g) (G2J(g)->state &= ~LJ_TRACE_ACTIVE)
+#define lj_trace_end(J) (J->state = LJ_TRACE_END)
 
 #else
 
-#define lj_trace_flushall(L)	(UNUSED(L), 0)
-#define lj_trace_initstate(g)	UNUSED(g)
-#define lj_trace_freestate(g)	UNUSED(g)
-#define lj_trace_abort(g)	UNUSED(g)
-#define lj_trace_end(J)		UNUSED(J)
+#define lj_trace_flushall(L) (UNUSED(L), 0)
+#define lj_trace_initstate(g) UNUSED(g)
+#define lj_trace_freestate(g) UNUSED(g)
+#define lj_trace_abort(g) UNUSED(g)
+#define lj_trace_end(J) UNUSED(J)
 
 #endif
 

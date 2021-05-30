@@ -1,5 +1,5 @@
 /*
-GameSpy Peer SDK 
+GameSpy Peer SDK
 Dan "Mr. Pants" Schoenblum
 dan@gamespy.com
 
@@ -16,21 +16,19 @@ devsupport@gamespy.com
 *************/
 #include "peerMain.h"
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 
 /**************
 ** FUNCTIONS **
 **************/
 PEERBool piRoomsInit(PEER peer);
 void piRoomsCleanup(PEER peer);
-void piStartedEnteringRoom(PEER peer, RoomType roomType, const char * room);
-void piFinishedEnteringRoom(PEER peer, RoomType roomType, const char * name);
-void piLeaveRoom(PEER peer, RoomType roomType, const char * reason);
-PEERBool piRoomToType(PEER peer, const char * room, RoomType * roomType);
+void piStartedEnteringRoom(PEER peer, RoomType roomType, const char *room);
+void piFinishedEnteringRoom(PEER peer, RoomType roomType, const char *name);
+void piLeaveRoom(PEER peer, RoomType roomType, const char *reason);
+PEERBool piRoomToType(PEER peer, const char *room, RoomType *roomType);
 void piSetLocalFlags(PEER peer);
 
 #ifdef __cplusplus

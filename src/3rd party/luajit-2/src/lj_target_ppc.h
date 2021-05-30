@@ -8,23 +8,25 @@
 
 /* -- Registers IDs ------------------------------------------------------- */
 
-#define GPRDEF(_) \
-  _(R0) _(SP) _(SYS1) _(R3) _(R4) _(R5) _(R6) _(R7) \
-  _(R8) _(R9) _(R10) _(R11) _(R12) _(SYS2) _(R14) _(R15) \
-  _(R16) _(R17) _(R18) _(R19) _(R20) _(R21) _(R22) _(R23) \
-  _(R24) _(R25) _(R26) _(R27) _(R28) _(R29) _(R30) _(R31)
-#define FPRDEF(_) \
-  _(F0) _(F1) _(F2) _(F3) _(F4) _(F5) _(F6) _(F7) \
-  _(F8) _(F9) _(F10) _(F11) _(F12) _(F13) _(F14) _(F15) \
-  _(F16) _(F17) _(F18) _(F19) _(F20) _(F21) _(F22) _(F23) \
-  _(F24) _(F25) _(F26) _(F27) _(F28) _(F29) _(F30) _(F31)
+#define GPRDEF(_)                                                              \
+  _(R0)                                                                        \
+  _(SP)                                                                        \
+  _(SYS1) _(R3) _(R4) _(R5) _(R6) _(R7) _(R8) _(R9) _(R10) _(R11) _(R12)       \
+      _(SYS2) _(R14) _(R15) _(R16) _(R17) _(R18) _(R19) _(R20) _(R21) _(R22)   \
+          _(R23) _(R24) _(R25) _(R26) _(R27) _(R28) _(R29) _(R30) _(R31)
+#define FPRDEF(_)                                                              \
+  _(F0)                                                                        \
+  _(F1)                                                                        \
+  _(F2) _(F3) _(F4) _(F5) _(F6) _(F7) _(F8) _(F9) _(F10) _(F11) _(F12) _(F13)  \
+      _(F14) _(F15) _(F16) _(F17) _(F18) _(F19) _(F20) _(F21) _(F22) _(F23)    \
+          _(F24) _(F25) _(F26) _(F27) _(F28) _(F29) _(F30) _(F31)
 #define VRIDDEF(_)
 
-#define RIDENUM(name)	RID_##name,
+#define RIDENUM(name) RID_##name,
 
 enum {
-  GPRDEF(RIDENUM)		/* General-purpose registers (GPRs). */
-  FPRDEF(RIDENUM)		/* Floating-point registers (FPRs). */
+  GPRDEF(RIDENUM) /* General-purpose registers (GPRs). */
+  FPRDEF(RIDENUM) /* Floating-point registers (FPRs). */
   RID_MAX,
   RID_TMP = RID_R0,
 
@@ -35,44 +37,44 @@ enum {
   RID_FPRET = RID_F1,
 
   /* These definitions must match with the *.dasc file(s): */
-  RID_BASE = RID_R14,		/* Interpreter BASE. */
-  RID_LPC = RID_R16,		/* Interpreter PC. */
-  RID_DISPATCH = RID_R17,	/* Interpreter DISPATCH table. */
-  RID_LREG = RID_R18,		/* Interpreter L. */
-  RID_JGL = RID_R31,		/* On-trace: global_State + 32768. */
+  RID_BASE = RID_R14,     /* Interpreter BASE. */
+  RID_LPC = RID_R16,      /* Interpreter PC. */
+  RID_DISPATCH = RID_R17, /* Interpreter DISPATCH table. */
+  RID_LREG = RID_R18,     /* Interpreter L. */
+  RID_JGL = RID_R31,      /* On-trace: global_State + 32768. */
 
   /* Register ranges [min, max) and number of registers. */
   RID_MIN_GPR = RID_R0,
-  RID_MAX_GPR = RID_R31+1,
+  RID_MAX_GPR = RID_R31 + 1,
   RID_MIN_FPR = RID_F0,
-  RID_MAX_FPR = RID_F31+1,
+  RID_MAX_FPR = RID_F31 + 1,
   RID_NUM_GPR = RID_MAX_GPR - RID_MIN_GPR,
   RID_NUM_FPR = RID_MAX_FPR - RID_MIN_FPR
 };
 
-#define RID_NUM_KREF		RID_NUM_GPR
-#define RID_MIN_KREF		RID_R0
+#define RID_NUM_KREF RID_NUM_GPR
+#define RID_MIN_KREF RID_R0
 
 /* -- Register sets ------------------------------------------------------- */
 
 /* Make use of all registers, except TMP, SP, SYS1, SYS2 and JGL. */
-#define RSET_FIXED \
-  (RID2RSET(RID_TMP)|RID2RSET(RID_SP)|RID2RSET(RID_SYS1)|\
-   RID2RSET(RID_SYS2)|RID2RSET(RID_JGL))
-#define RSET_GPR	(RSET_RANGE(RID_MIN_GPR, RID_MAX_GPR) - RSET_FIXED)
-#define RSET_FPR	RSET_RANGE(RID_MIN_FPR, RID_MAX_FPR)
-#define RSET_ALL	(RSET_GPR|RSET_FPR)
-#define RSET_INIT	RSET_ALL
+#define RSET_FIXED                                                             \
+  (RID2RSET(RID_TMP) | RID2RSET(RID_SP) | RID2RSET(RID_SYS1) |                 \
+   RID2RSET(RID_SYS2) | RID2RSET(RID_JGL))
+#define RSET_GPR (RSET_RANGE(RID_MIN_GPR, RID_MAX_GPR) - RSET_FIXED)
+#define RSET_FPR RSET_RANGE(RID_MIN_FPR, RID_MAX_FPR)
+#define RSET_ALL (RSET_GPR | RSET_FPR)
+#define RSET_INIT RSET_ALL
 
-#define RSET_SCRATCH_GPR	(RSET_RANGE(RID_R3, RID_R12+1))
-#define RSET_SCRATCH_FPR	(RSET_RANGE(RID_F0, RID_F13+1))
-#define RSET_SCRATCH		(RSET_SCRATCH_GPR|RSET_SCRATCH_FPR)
-#define REGARG_FIRSTGPR		RID_R3
-#define REGARG_LASTGPR		RID_R10
-#define REGARG_NUMGPR		8
-#define REGARG_FIRSTFPR		RID_F1
-#define REGARG_LASTFPR		RID_F8
-#define REGARG_NUMFPR		8
+#define RSET_SCRATCH_GPR (RSET_RANGE(RID_R3, RID_R12 + 1))
+#define RSET_SCRATCH_FPR (RSET_RANGE(RID_F0, RID_F13 + 1))
+#define RSET_SCRATCH (RSET_SCRATCH_GPR | RSET_SCRATCH_FPR)
+#define REGARG_FIRSTGPR RID_R3
+#define REGARG_LASTGPR RID_R10
+#define REGARG_NUMGPR 8
+#define REGARG_FIRSTFPR RID_F1
+#define REGARG_LASTFPR RID_F8
+#define REGARG_NUMFPR 8
 
 /* -- Spill slots --------------------------------------------------------- */
 
@@ -87,52 +89,52 @@ enum {
 ** [sp+ 4] tmpw, LR of callee
 ** [sp+ 0] stack chain
 */
-#define SPS_FIXED	7
-#define SPS_FIRST	4
+#define SPS_FIXED 7
+#define SPS_FIRST 4
 
 /* Stack offsets for temporary slots. Used for FP<->int conversions etc. */
-#define SPOFS_TMPW	4
-#define SPOFS_TMP	8
-#define SPOFS_TMPHI	8
-#define SPOFS_TMPLO	12
+#define SPOFS_TMPW 4
+#define SPOFS_TMP 8
+#define SPOFS_TMPHI 8
+#define SPOFS_TMPLO 12
 
-#define sps_scale(slot)		(4 * (int32_t)(slot))
-#define sps_align(slot)		(((slot) - SPS_FIXED + 3) & ~3)
+#define sps_scale(slot) (4 * (int32_t)(slot))
+#define sps_align(slot) (((slot)-SPS_FIXED + 3) & ~3)
 
 /* -- Exit state ---------------------------------------------------------- */
 
 /* This definition must match with the *.dasc file(s). */
 typedef struct {
-  lua_Number fpr[RID_NUM_FPR];	/* Floating-point registers. */
-  int32_t gpr[RID_NUM_GPR];	/* General-purpose registers. */
-  int32_t spill[256];		/* Spill slots. */
+  lua_Number fpr[RID_NUM_FPR]; /* Floating-point registers. */
+  int32_t gpr[RID_NUM_GPR];    /* General-purpose registers. */
+  int32_t spill[256];          /* Spill slots. */
 } ExitState;
 
 /* Highest exit + 1 indicates stack check. */
-#define EXITSTATE_CHECKEXIT	1
+#define EXITSTATE_CHECKEXIT 1
 
 /* Return the address of a per-trace exit stub. */
-static LJ_AINLINE uint32_t *exitstub_trace_addr_(uint32_t *p, uint32_t exitno)
-{
-  while (*p == 0x60000000) p++;  /* Skip PPCI_NOP. */
+static LJ_AINLINE uint32_t *exitstub_trace_addr_(uint32_t *p, uint32_t exitno) {
+  while (*p == 0x60000000)
+    p++; /* Skip PPCI_NOP. */
   return p + 3 + exitno;
 }
 /* Avoid dependence on lj_jit.h if only including lj_target.h. */
-#define exitstub_trace_addr(T, exitno) \
+#define exitstub_trace_addr(T, exitno)                                         \
   exitstub_trace_addr_((MCode *)((char *)(T)->mcode + (T)->szmcode), (exitno))
 
 /* -- Instructions -------------------------------------------------------- */
 
 /* Instruction fields. */
-#define PPCF_CC(cc)	((((cc) & 3) << 16) | (((cc) & 4) << 22))
-#define PPCF_T(r)	((r) << 21)
-#define PPCF_A(r)	((r) << 16)
-#define PPCF_B(r)	((r) << 11)
-#define PPCF_C(r)	((r) << 6)
-#define PPCF_MB(n)	((n) << 6)
-#define PPCF_ME(n)	((n) << 1)
-#define PPCF_Y		0x00200000
-#define PPCF_DOT	0x00000001
+#define PPCF_CC(cc) ((((cc)&3) << 16) | (((cc)&4) << 22))
+#define PPCF_T(r) ((r) << 21)
+#define PPCF_A(r) ((r) << 16)
+#define PPCF_B(r) ((r) << 11)
+#define PPCF_C(r) ((r) << 6)
+#define PPCF_MB(n) ((n) << 6)
+#define PPCF_ME(n) ((n) << 1)
+#define PPCF_Y 0x00200000
+#define PPCF_DOT 0x00000001
 
 typedef enum PPCIns {
   /* Integer instructions. */
@@ -274,7 +276,14 @@ typedef enum PPCIns {
 } PPCIns;
 
 typedef enum PPCCC {
-  CC_GE, CC_LE, CC_NE, CC_NS, CC_LT, CC_GT, CC_EQ, CC_SO
+  CC_GE,
+  CC_LE,
+  CC_NE,
+  CC_NS,
+  CC_LT,
+  CC_GT,
+  CC_EQ,
+  CC_SO
 } PPCCC;
 
 #endif

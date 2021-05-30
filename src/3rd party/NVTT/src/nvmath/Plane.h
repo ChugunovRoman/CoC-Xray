@@ -3,75 +3,71 @@
 #ifndef NV_MATH_PLANE_H
 #define NV_MATH_PLANE_H
 
-#include <nvmath/nvmath.h>
 #include <nvmath/Vector.h>
+#include <nvmath/nvmath.h>
 
-namespace nv
-{
-	class Matrix;
+namespace nv {
+class Matrix;
 
+class NVMATH_CLASS Plane {
+public:
+  typedef Plane const &Arg;
 
-	class NVMATH_CLASS Plane
-	{
-	public:
-		typedef Plane const & Arg;
-		
-		Plane();
-		Plane(float x, float y, float z, float w);
-		Plane(Vector4::Arg v);
-		Plane(Vector3::Arg v, float d);
-		Plane(Vector3::Arg normal, Vector3::Arg point);
-		
-		const Plane & operator=(Plane::Arg v);
-		
-		Vector3 vector() const;
-		scalar offset() const;
-		
-		const Vector4 & asVector() const;
-		Vector4 & asVector();
-		
-		void operator*=(scalar s);
+  Plane();
+  Plane(float x, float y, float z, float w);
+  Plane(Vector4::Arg v);
+  Plane(Vector3::Arg v, float d);
+  Plane(Vector3::Arg normal, Vector3::Arg point);
 
-	private:
-		Vector4 p;
-	};
+  const Plane &operator=(Plane::Arg v);
 
-	inline Plane::Plane() {}
-	inline Plane::Plane(float x, float y, float z, float w) : p(x, y, z, w) {}
-	inline Plane::Plane(Vector4::Arg v) : p(v) {}
-	inline Plane::Plane(Vector3::Arg v, float d) : p(v, d) {}
-	inline Plane::Plane(Vector3::Arg normal, Vector3::Arg point) : p(normal, dot(normal, point)) {}
-	
-	inline const Plane & Plane::operator=(Plane::Arg v) { p = v.p; return *this; }
-	
-	inline Vector3 Plane::vector() const { return p.xyz(); }
-	inline scalar Plane::offset() const { return p.w(); }
+  Vector3 vector() const;
+  scalar offset() const;
 
-	inline const Vector4 & Plane::asVector() const { return p; }
-	inline Vector4 & Plane::asVector() { return p; }
+  const Vector4 &asVector() const;
+  Vector4 &asVector();
 
-	// Normalize plane.
-	inline Plane normalize(Plane::Arg plane, float epsilon = NV_EPSILON)
-	{
-		const float len = length(plane.vector());
-		nvDebugCheck(!isZero(len, epsilon));
-		const float inv = 1.0f / len;
-		return Plane(plane.asVector() * inv);
-	}
+  void operator*=(scalar s);
 
-	// Get the distance from the given point to this plane.
-	inline float distance(Plane::Arg plane, Vector3::Arg point)
-	{
-		return dot(plane.vector(), point) - plane.offset();
-	}
+private:
+  Vector4 p;
+};
 
-	inline void Plane::operator*=(scalar s)
-	{
-		scale(p, s);
-	}
+inline Plane::Plane() {}
+inline Plane::Plane(float x, float y, float z, float w) : p(x, y, z, w) {}
+inline Plane::Plane(Vector4::Arg v) : p(v) {}
+inline Plane::Plane(Vector3::Arg v, float d) : p(v, d) {}
+inline Plane::Plane(Vector3::Arg normal, Vector3::Arg point)
+    : p(normal, dot(normal, point)) {}
 
-	Plane transformPlane(const Matrix&, Plane::Arg);
-	
-} // nv namespace
+inline const Plane &Plane::operator=(Plane::Arg v) {
+  p = v.p;
+  return *this;
+}
+
+inline Vector3 Plane::vector() const { return p.xyz(); }
+inline scalar Plane::offset() const { return p.w(); }
+
+inline const Vector4 &Plane::asVector() const { return p; }
+inline Vector4 &Plane::asVector() { return p; }
+
+// Normalize plane.
+inline Plane normalize(Plane::Arg plane, float epsilon = NV_EPSILON) {
+  const float len = length(plane.vector());
+  nvDebugCheck(!isZero(len, epsilon));
+  const float inv = 1.0f / len;
+  return Plane(plane.asVector() * inv);
+}
+
+// Get the distance from the given point to this plane.
+inline float distance(Plane::Arg plane, Vector3::Arg point) {
+  return dot(plane.vector(), point) - plane.offset();
+}
+
+inline void Plane::operator*=(scalar s) { scale(p, s); }
+
+Plane transformPlane(const Matrix &, Plane::Arg);
+
+} // namespace nv
 
 #endif // NV_MATH_PLANE_H

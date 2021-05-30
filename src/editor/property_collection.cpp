@@ -6,30 +6,22 @@
 //	Description : property collection class
 ////////////////////////////////////////////////////////////////////////////
 
-#include "pch.hpp"
 #include "property_collection.hpp"
+#include "pch.hpp"
 #include "property_collection_enumerator.hpp"
-#include "property_holder.hpp"
 #include "property_container.hpp"
+#include "property_holder.hpp"
 
 using System::Object;
 using System::Collections::IEnumerator;
 
-property_collection::property_collection		(collection_type* collection) :
-	m_collection				(collection)
-{
-}
+property_collection::property_collection(collection_type *collection)
+    : m_collection(collection) {}
 
-property_collection::~property_collection		()
-{
-	this->!property_collection	();
-}
+property_collection::~property_collection() { this->!property_collection(); }
 
-property_collection::!property_collection		()
-{
-}
+property_collection::!property_collection() {}
 
-property_collection::collection_type* property_collection::collection	()
-{
-	return						(m_collection);
+property_collection::collection_type *property_collection::collection() {
+  return (m_collection);
 }

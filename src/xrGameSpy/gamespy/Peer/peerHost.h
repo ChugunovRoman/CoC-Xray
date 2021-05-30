@@ -1,5 +1,5 @@
 /*
-GameSpy Peer SDK 
+GameSpy Peer SDK
 Dan "Mr. Pants" Schoenblum
 dan@gamespy.com
 
@@ -15,7 +15,6 @@ devsupport@gamespy.com
 ** INCLUDES **
 *************/
 #include "peerMain.h"
-
 
 #ifdef __cplusplus
 extern "C" {

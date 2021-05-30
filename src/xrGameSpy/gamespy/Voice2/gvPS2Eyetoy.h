@@ -20,12 +20,13 @@ http://gamespy.net
 
 // this is set on all eyetoy GVDeviceID's
 // it prevents a conflict with headset id's, which also use a 0-based index
-#define GVI_EYETOY_DEVICEID_BIT              0x80000000
+#define GVI_EYETOY_DEVICEID_BIT 0x80000000
 
 GVBool gviPS2EyetoyStartup(void);
 void gviPS2EyetoyCleanup(void);
 
-int gviPS2EyetoyListDevices(GVDeviceInfo devices[], int maxDevices, GVDeviceType types);
+int gviPS2EyetoyListDevices(GVDeviceInfo devices[], int maxDevices,
+                            GVDeviceType types);
 
 GVDevice gviPS2EyetoyNewDevice(GVDeviceID deviceID, GVDeviceType type);
 

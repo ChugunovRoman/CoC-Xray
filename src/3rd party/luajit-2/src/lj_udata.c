@@ -6,15 +6,14 @@
 #define lj_udata_c
 #define LUA_CORE
 
-#include "lj_obj.h"
-#include "lj_gc.h"
 #include "lj_udata.h"
+#include "lj_gc.h"
+#include "lj_obj.h"
 
-GCudata *lj_udata_new(lua_State *L, MSize sz, GCtab *env)
-{
+GCudata *lj_udata_new(lua_State *L, MSize sz, GCtab *env) {
   GCudata *ud = lj_mem_newt(L, sizeof(GCudata) + sz, GCudata);
   global_State *g = G(L);
-  newwhite(g, ud);  /* Not finalized. */
+  newwhite(g, ud); /* Not finalized. */
   ud->gct = ~LJ_TUDATA;
   ud->udtype = UDTYPE_USERDATA;
   ud->len = sz;
@@ -27,8 +26,6 @@ GCudata *lj_udata_new(lua_State *L, MSize sz, GCtab *env)
   return ud;
 }
 
-void LJ_FASTCALL lj_udata_free(global_State *g, GCudata *ud)
-{
+void LJ_FASTCALL lj_udata_free(global_State *g, GCudata *ud) {
   lj_mem_free(g, ud, sizeudata(ud));
 }
-

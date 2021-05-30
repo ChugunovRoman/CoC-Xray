@@ -1,12 +1,12 @@
 /***
-*
-*	Copyright (c) 2001 Escape Factory, Ltd. All rights reserved.
-*
-****/
+ *
+ *	Copyright (c) 2001 Escape Factory, Ltd. All rights reserved.
+ *
+ ****/
 
 //
 //////////////////////////////////////////////////////////////////////
-#include "stdafx.h" 
+#include "stdafx.h"
 
 #include "SmdBone.h"
 
@@ -14,14 +14,10 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-SmdBone::SmdBone() 
-{
-	id			= -1;
-	parentId	= -1;
-	name		= NULL;
+SmdBone::SmdBone() {
+  id = -1;
+  parentId = -1;
+  name = NULL;
 }
 
-SmdBone::~SmdBone()
-{
-	xr_free(name);
-}
+SmdBone::~SmdBone() { xr_free(name); }

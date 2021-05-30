@@ -1,154 +1,119 @@
-#include "stdafx.h"
 #include "weaponpistol.h"
 #include "ParticlesObject.h"
 #include "actor.h"
+#include "stdafx.h"
 
-CWeaponPistol::CWeaponPistol()
-{
-    m_eSoundClose = ESoundTypes(SOUND_TYPE_WEAPON_RECHARGING);
-    SetPending(FALSE);
+CWeaponPistol::CWeaponPistol() {
+  m_eSoundClose = ESoundTypes(SOUND_TYPE_WEAPON_RECHARGING);
+  SetPending(FALSE);
 }
 
-CWeaponPistol::~CWeaponPistol(void)
-{}
+CWeaponPistol::~CWeaponPistol(void) {}
 
-void CWeaponPistol::net_Destroy()
-{
-    inherited::net_Destroy();
+void CWeaponPistol::net_Destroy() { inherited::net_Destroy(); }
+
+void CWeaponPistol::Load(LPCSTR section) {
+  inherited::Load(section);
+
+  m_sounds.LoadSound(section, "snd_close", "sndClose", false, m_eSoundClose);
 }
 
-void CWeaponPistol::Load(LPCSTR section)
-{
-    inherited::Load(section);
+void CWeaponPistol::OnH_B_Chield() { inherited::OnH_B_Chield(); }
 
-    m_sounds.LoadSound(section, "snd_close", "sndClose", false, m_eSoundClose);
+void CWeaponPistol::PlayAnimShow() {
+  VERIFY(GetState() == eShowing);
+
+  if (m_ammoElapsed.type1 == 0)
+    PlayHUDMotion("anm_show_empty", FALSE, this, GetState());
+  else
+    inherited::PlayAnimShow();
 }
 
-void CWeaponPistol::OnH_B_Chield()
-{
-    inherited::OnH_B_Chield();
+void CWeaponPistol::PlayAnimBore() {
+  if (m_ammoElapsed.type1 == 0)
+    PlayHUDMotion("anm_bore_empty", TRUE, this, GetState());
+  else
+    inherited::PlayAnimBore();
 }
 
-void CWeaponPistol::PlayAnimShow()
-{
-    VERIFY(GetState() == eShowing);
-
-    if (m_ammoElapsed.type1 == 0)
-        PlayHUDMotion("anm_show_empty", FALSE, this, GetState());
-    else
-        inherited::PlayAnimShow();
+void CWeaponPistol::PlayAnimIdleSprint() {
+  if (m_ammoElapsed.type1 == 0) {
+    PlayHUDMotion("anm_idle_sprint_empty", TRUE, NULL, GetState());
+  } else {
+    inherited::PlayAnimIdleSprint();
+  }
 }
 
-void CWeaponPistol::PlayAnimBore()
-{
-    if (m_ammoElapsed.type1 == 0)
-        PlayHUDMotion("anm_bore_empty", TRUE, this, GetState());
-    else
-        inherited::PlayAnimBore();
+void CWeaponPistol::PlayAnimIdleMoving() {
+  if (m_ammoElapsed.type1 == 0) {
+    PlayHUDMotion("anm_idle_moving_empty", TRUE, NULL, GetState());
+  } else {
+    inherited::PlayAnimIdleMoving();
+  }
 }
 
-void CWeaponPistol::PlayAnimIdleSprint()
-{
-    if (m_ammoElapsed.type1 == 0)
-    {
-        PlayHUDMotion("anm_idle_sprint_empty", TRUE, NULL, GetState());
-    }
-    else
-    {
-        inherited::PlayAnimIdleSprint();
-    }
+void CWeaponPistol::PlayAnimIdle() {
+  if (TryPlayAnimIdle())
+    return;
+
+  if (m_ammoElapsed.type1 == 0) {
+    PlayHUDMotion("anm_idle_empty", TRUE, NULL, GetState());
+  } else {
+    inherited::PlayAnimIdle();
+  }
 }
 
-void CWeaponPistol::PlayAnimIdleMoving()
-{
-    if (m_ammoElapsed.type1 == 0)
-    {
-        PlayHUDMotion("anm_idle_moving_empty", TRUE, NULL, GetState());
-    }
-    else
-    {
-        inherited::PlayAnimIdleMoving();
-    }
+void CWeaponPistol::PlayAnimAim() {
+  if (m_ammoElapsed.type1 == 0)
+    PlayHUDMotion("anm_idle_aim_empty", TRUE, NULL, GetState());
+  else
+    inherited::PlayAnimAim();
 }
 
-void CWeaponPistol::PlayAnimIdle()
-{
-    if (TryPlayAnimIdle()) return;
-
-    if (m_ammoElapsed.type1 == 0)
-    {
-        PlayHUDMotion("anm_idle_empty", TRUE, NULL, GetState());
-    }
-    else
-    {
-        inherited::PlayAnimIdle();
-    }
+void CWeaponPistol::PlayAnimReload() {
+  /*VERIFY(GetState() == eReload);
+  if (m_ammoElapsed.type1 == 0)
+  {
+  PlayHUDMotion("anm_reload_empty", TRUE, this, GetState());
+  }
+  else
+  {
+  PlayHUDMotion("anm_reload", TRUE, this, GetState());
+  }*/
+  inherited::PlayAnimReload(); // AVO: refactored to use grand-parent
+                               // (CWeaponMagazined) function
 }
 
-void CWeaponPistol::PlayAnimAim()
-{
-    if (m_ammoElapsed.type1 == 0)
-        PlayHUDMotion("anm_idle_aim_empty", TRUE, NULL, GetState());
-    else
-        inherited::PlayAnimAim();
+void CWeaponPistol::PlayAnimHide() {
+  VERIFY(GetState() == eHiding);
+  if (m_ammoElapsed.type1 == 0) {
+    PlaySound("sndClose", get_LastFP());
+    PlayHUDMotion("anm_hide_empty", TRUE, this, GetState());
+  } else
+    inherited::PlayAnimHide();
 }
 
-void CWeaponPistol::PlayAnimReload()
-{
-    /*VERIFY(GetState() == eReload);
-    if (m_ammoElapsed.type1 == 0)
-    {
-    PlayHUDMotion("anm_reload_empty", TRUE, this, GetState());
-    }
-    else
-    {
-    PlayHUDMotion("anm_reload", TRUE, this, GetState());
-    }*/
-    inherited::PlayAnimReload(); //AVO: refactored to use grand-parent (CWeaponMagazined) function
+void CWeaponPistol::PlayAnimShoot() {
+  VERIFY(GetState() == eFire);
+  if (m_ammoElapsed.type1 > 1) {
+    PlayHUDMotion("anm_shots", FALSE, this, GetState());
+  } else {
+    PlayHUDMotion("anm_shot_l", FALSE, this, GetState());
+  }
 }
 
-void CWeaponPistol::PlayAnimHide()
-{
-    VERIFY(GetState() == eHiding);
-    if (m_ammoElapsed.type1 == 0)
-    {
-        PlaySound("sndClose", get_LastFP());
-        PlayHUDMotion("anm_hide_empty", TRUE, this, GetState());
-    }
-    else
-        inherited::PlayAnimHide();
+void CWeaponPistol::switch2_Reload() { inherited::switch2_Reload(); }
+
+void CWeaponPistol::OnAnimationEnd(u32 state) {
+  inherited::OnAnimationEnd(state);
 }
 
-void CWeaponPistol::PlayAnimShoot()
-{
-    VERIFY(GetState() == eFire);
-    if (m_ammoElapsed.type1 > 1)
-    {
-        PlayHUDMotion("anm_shots", FALSE, this, GetState());
-    }
-    else
-    {
-        PlayHUDMotion("anm_shot_l", FALSE, this, GetState());
-    }
+void CWeaponPistol::OnShot() {
+  inherited::OnShot(); // Alundaio: not changed from inherited, so instead of
+                       // copying changes from weaponmagazined, we just do this
 }
 
-void CWeaponPistol::switch2_Reload()
-{
-    inherited::switch2_Reload();
-}
-
-void CWeaponPistol::OnAnimationEnd(u32 state)
-{
-    inherited::OnAnimationEnd(state);
-}
-
-void CWeaponPistol::OnShot()
-{
-	inherited::OnShot(); //Alundaio: not changed from inherited, so instead of copying changes from weaponmagazined, we just do this
-}
-
-void CWeaponPistol::UpdateSounds()
-{
-    inherited::UpdateSounds();
-    m_sounds.SetPosition("sndClose", get_LastFP());
+void CWeaponPistol::UpdateSounds() {
+  inherited::UpdateSounds();
+  m_sounds.SetPosition("sndClose", get_LastFP());
 }

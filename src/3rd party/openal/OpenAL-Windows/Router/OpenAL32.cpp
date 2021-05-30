@@ -18,44 +18,37 @@
  * Or go to http://www.gnu.org/copyleft/lgpl.html
  */
 
-
-
-
-#include <windows.h>
 #include "OpenAL32.h"
-
+#include <windows.h>
 
 //*****************************************************************************
 // DllMain
 //*****************************************************************************
 //
-BOOL APIENTRY DllMain(HANDLE module, DWORD reason, LPVOID reserved)
-{
-    BOOL result = TRUE;
+BOOL APIENTRY DllMain(HANDLE module, DWORD reason, LPVOID reserved) {
+  BOOL result = TRUE;
 
-    // Perform actions based on the reason for calling.
-    switch(reason)
-    {
-        case DLL_PROCESS_ATTACH:
-            // Create the context list lock so I can safely add/remove contexts.
-            result = alListCreate(&alContextList);
-            break;
+  // Perform actions based on the reason for calling.
+  switch (reason) {
+  case DLL_PROCESS_ATTACH:
+    // Create the context list lock so I can safely add/remove contexts.
+    result = alListCreate(&alContextList);
+    break;
 
-        case DLL_THREAD_ATTACH:
-            // Do thread-specific initialization.
-            break;
+  case DLL_THREAD_ATTACH:
+    // Do thread-specific initialization.
+    break;
 
-        case DLL_THREAD_DETACH:
-            // Do thread-specific cleanup.
-            break;
+  case DLL_THREAD_DETACH:
+    // Do thread-specific cleanup.
+    break;
 
-        case DLL_PROCESS_DETACH:
-            // Perform any necessary cleanup.
-            alListFree(alContextList);
-            alContextList = 0;
-            break;
-    }
+  case DLL_PROCESS_DETACH:
+    // Perform any necessary cleanup.
+    alListFree(alContextList);
+    alContextList = 0;
+    break;
+  }
 
-    return TRUE;
+  return TRUE;
 }
-

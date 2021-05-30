@@ -9,24 +9,22 @@
 #ifndef STEERING_BEHAVIOUR_SEPARATION_H_INCLUDED
 #define STEERING_BEHAVIOUR_SEPARATION_H_INCLUDED
 
-#include "steering_behaviour_base.h"
 #include "smart_cover_detail.h"
+#include "steering_behaviour_base.h"
 
 class CAI_Rat;
 
 namespace steering_behaviour {
 
-class separation :
-	public base,
-	private debug::make_final<separation>,
-	private boost::noncopyable 
-{
+class separation : public base,
+                   private debug::make_final<separation>,
+                   private boost::noncopyable {
 public:
-						separation	(CAI_Rat const *object);
-	virtual	Fvector		direction	();
+  separation(CAI_Rat const *object);
+  virtual Fvector direction();
 
 private:
-	typedef base		inherited;
+  typedef base inherited;
 };
 
 } // namespace steering_behaviour

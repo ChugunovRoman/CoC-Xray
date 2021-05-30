@@ -20,7 +20,7 @@ http://gamespy.net
 extern int GVISamplesPerFrame;
 extern int GVIBytesPerFrame;
 extern int GVIEncodedFrameSize;
-extern GVRate GVISampleRate;			//In samples per second.
+extern GVRate GVISampleRate; // In samples per second.
 extern int GVIBytesPerSecond;
 
 /**************
@@ -30,17 +30,17 @@ void gviCodecsInitialize(void);
 void gviCodecsCleanup(void);
 
 GVBool gviSetCodec(GVCodec codec);
-void gviSetCustomCodec(GVCustomCodecInfo * info);
+void gviSetCustomCodec(GVCustomCodecInfo *info);
 
 void gviSetSampleRate(GVRate sampleRate);
 GVRate gviGetSampleRate(void);
 
-GVBool gviNewDecoder(GVDecoderData * data);
+GVBool gviNewDecoder(GVDecoderData *data);
 void gviFreeDecoder(GVDecoderData data);
 
-void gviEncode(GVByte * out, const GVSample * in);
-void gviDecodeAdd(GVSample * out, const GVByte * in, GVDecoderData data);
-void gviDecodeSet(GVSample * out, const GVByte * in, GVDecoderData data);
+void gviEncode(GVByte *out, const GVSample *in);
+void gviDecodeAdd(GVSample *out, const GVByte *in, GVDecoderData data);
+void gviDecodeSet(GVSample *out, const GVByte *in, GVDecoderData data);
 
 void gviResetEncoder(void);
 

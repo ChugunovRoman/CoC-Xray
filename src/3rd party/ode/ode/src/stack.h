@@ -42,24 +42,21 @@ just like alloca():
 
 */
 
-
 #ifndef _ODE_STACK_H_
 #define _ODE_STACK_H_
-
 
 #ifdef WIN32
 #include "windows.h"
 #endif
 
-
 struct dStack {
-  char *base;		// bottom of the stack
-  int size;		// maximum size of the stack
-  char *pointer;	// current top of the stack
-  char *frame;		// linked list of stack frame ptrs
-# ifdef WIN32		// stuff for windows:
-  int pagesize;		//   - page size - this is ASSUMED to be a power of 2
-  int committed;	//   - bytes committed in allocated region
+  char *base;    // bottom of the stack
+  int size;      // maximum size of the stack
+  char *pointer; // current top of the stack
+  char *frame;   // linked list of stack frame ptrs
+#ifdef WIN32     // stuff for windows:
+  int pagesize;  //   - page size - this is ASSUMED to be a power of 2
+  int committed; //   - bytes committed in allocated region
 #endif
 
   // initialize the stack. `max_size' is the maximum size that the stack can
@@ -67,40 +64,33 @@ struct dStack {
   // mapped into the address space but does not actually consume physical
   // memory until it is referenced - so it is safe to set this to a high value.
 
-  void init (int max_size);
-
+  void init(int max_size);
 
   // destroy the stack. this unmaps any virtual memory that was allocated.
 
   void destroy();
 
-
   // allocate `size' bytes from the stack and return a pointer to the allocated
   // memory. `size' must be >= 0. the returned pointer will be aligned to the
   // size of a long int.
 
-  char * alloc (int size)
-  {
+  char *alloc(int size) {
     char *ret = pointer;
-    pointer += ((size-1) | (sizeof(long int)-1) )+1;
-#   ifdef WIN32
+    pointer += ((size - 1) | (sizeof(long int) - 1)) + 1;
+#ifdef WIN32
     // for windows we need to commit pages as they are required
-    if ((pointer-base) > committed) {
-      committed = ((pointer-base-1) | (pagesize-1))+1;	// round up to pgsize
-      VirtualAlloc (base,committed,MEM_COMMIT,PAGE_READWRITE);
+    if ((pointer - base) > committed) {
+      committed =
+          ((pointer - base - 1) | (pagesize - 1)) + 1; // round up to pgsize
+      VirtualAlloc(base, committed, MEM_COMMIT, PAGE_READWRITE);
     }
-#   endif
+#endif
     return ret;
   }
 
-
   // return the address that will be returned by the next call to alloc()
 
-  char *nextAlloc()
-  {
-    return pointer;
-  }
-
+  char *nextAlloc() { return pointer; }
 
   // push and pop the current size of the stack. pushFrame() saves the current
   // frame pointer on the stack, and popFrame() retrieves it. a typical
@@ -109,30 +99,27 @@ struct dStack {
   // be the same value for the two bracketing calls. calling popFrame() too
   // many times will result in a segfault.
 
-  char * pushFrame()
-  {
+  char *pushFrame() {
     char *newframe = pointer;
-    char **addr = (char**) alloc (sizeof(char*));
+    char **addr = (char **)alloc(sizeof(char *));
     *addr = frame;
     frame = newframe;
     return newframe;
 
     /* OLD CODE
-	*((char**)pointer) = frame;
-	frame = pointer;
-	char *ret = pointer;
-	pointer += sizeof(char*);
-	return ret;
+        *((char**)pointer) = frame;
+        frame = pointer;
+        char *ret = pointer;
+        pointer += sizeof(char*);
+        return ret;
     */
   }
 
-  char * popFrame()
-  {
+  char *popFrame() {
     pointer = frame;
-    frame = *((char**)pointer);
+    frame = *((char **)pointer);
     return pointer;
   }
 };
-
 
 #endif

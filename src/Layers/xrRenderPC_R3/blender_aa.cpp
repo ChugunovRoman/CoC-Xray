@@ -1,20 +1,18 @@
-#include "stdafx.h"
 #include "blender_aa.h"
+#include "stdafx.h"
 
-CBlender_FXAA::CBlender_FXAA()	{ description.CLS = 0; }
-CBlender_FXAA::~CBlender_FXAA()	{	}
+CBlender_FXAA::CBlender_FXAA() { description.CLS = 0; }
+CBlender_FXAA::~CBlender_FXAA() {}
 
-void	CBlender_FXAA::Compile(CBlender_Compile& C)
-{
-	IBlender::Compile(C);
+void CBlender_FXAA::Compile(CBlender_Compile &C) {
+  IBlender::Compile(C);
 
-	switch (C.iElement)
-	{
-	case 0:
-		C.r_Pass("fxaa_main", "fxaa_main", FALSE, FALSE, FALSE);
-		C.r_dx10Texture("s_base0", r2_RT_generic0);
-		C.r_dx10Sampler("smp_rtlinear");
-		C.r_End();
-		break;
-	}
+  switch (C.iElement) {
+  case 0:
+    C.r_Pass("fxaa_main", "fxaa_main", FALSE, FALSE, FALSE);
+    C.r_dx10Texture("s_base0", r2_RT_generic0);
+    C.r_dx10Sampler("smp_rtlinear");
+    C.r_End();
+    break;
+  }
 }

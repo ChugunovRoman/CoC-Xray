@@ -18,9 +18,6 @@
  * Or go to http://www.gnu.org/copyleft/lgpl.html
  */
 
-
-
-
 #ifndef _AL_LIST_H_
 #define _AL_LIST_H_
 
@@ -31,8 +28,6 @@ extern "C" {
 #endif
 
 #include <windows.h>
-
-
 
 //*****************************************************************************
 //*****************************************************************************
@@ -60,68 +55,64 @@ extern "C" {
 //
 // The list entry.  This should not be modified outside the list routines.
 //
-typedef struct ALlistEntry_Struct
-{
-    //
-    // The previous list entry.
-    //
-    struct ALlistEntry_Struct* Previous;
+typedef struct ALlistEntry_Struct {
+  //
+  // The previous list entry.
+  //
+  struct ALlistEntry_Struct *Previous;
 
-    //
-    // The next list entry.
-    //
-    struct ALlistEntry_Struct* Next;
+  //
+  // The next list entry.
+  //
+  struct ALlistEntry_Struct *Next;
 
-    //
-    // The data for the current entry.
-    //
-    ALvoid* Data;
+  //
+  // The data for the current entry.
+  //
+  ALvoid *Data;
 
 } ALlistEntry;
-
 
 //
 // This is the context to pass to all the list calls.  It must be initialized
 // before any list calls are made.
 //
-typedef struct //ALlist_Struct
+typedef struct // ALlist_Struct
 {
-    //
-    // This is the pointer to the first item in the list.
-    //
-    ALlistEntry* Head;
+  //
+  // This is the pointer to the first item in the list.
+  //
+  ALlistEntry *Head;
 
-    //
-    // This is the pointer to the last item in the list.
-    //
-    ALlistEntry* Tail;
+  //
+  // This is the pointer to the last item in the list.
+  //
+  ALlistEntry *Tail;
 
-    //
-    // This is the list iterator.
-    //
-    ALlistEntry* Current;
+  //
+  // This is the list iterator.
+  //
+  ALlistEntry *Current;
 
-    //
-    // This is the list lock to prevent simultaneous addition and removal
-    // of entries.
-    //
-    CRITICAL_SECTION Lock;
+  //
+  // This is the list lock to prevent simultaneous addition and removal
+  // of entries.
+  //
+  CRITICAL_SECTION Lock;
 
-    //
-    // This maintains a count of the number of entries in the list.
-    //
-    ALint NumberOfEntries;
+  //
+  // This maintains a count of the number of entries in the list.
+  //
+  ALint NumberOfEntries;
 
-    //
-    // This is set if the list is locked.  For debug use only.
-    //
-#if(DBG)
-    ALint Locked;
+  //
+  // This is set if the list is locked.  For debug use only.
+  //
+#if (DBG)
+  ALint Locked;
 #endif
 
 } ALlist;
-
-
 
 //*****************************************************************************
 //*****************************************************************************
@@ -136,22 +127,14 @@ typedef struct //ALlist_Struct
 //*****************************************************************************
 // Adds an entry to the tail of the list.  Each entry must be unique.
 //
-ALvoid alListAddEntry
-(
-    IN  ALlist* pList,
-    IN  ALlistEntry* pEntry
-);
+ALvoid alListAddEntry(IN ALlist *pList, IN ALlistEntry *pEntry);
 
 //*****************************************************************************
 // alListAddEntryToHead
 //*****************************************************************************
 // Adds an entry to the head of the list.  Each entry must be unique.
 //
-ALvoid alListAddEntryToHead
-(
-    IN  ALlist* pList,
-    IN  ALlistEntry* pEntry
-);
+ALvoid alListAddEntryToHead(IN ALlist *pList, IN ALlistEntry *pEntry);
 
 //*****************************************************************************
 // alListAcquireLock
@@ -159,71 +142,49 @@ ALvoid alListAddEntryToHead
 // This is called to acquire the list lock for operations that span multiple
 // list calls like iterating over the list.
 //
-ALvoid alListAcquireLock
-(
-    IN  ALlist* pList
-);
+ALvoid alListAcquireLock(IN ALlist *pList);
 
 //*****************************************************************************
 // alListCreate
 //*****************************************************************************
 // Creates and initializes a list.
 //
-ALboolean alListCreate
-(
-    OUT ALlist** ppList
-);
+ALboolean alListCreate(OUT ALlist **ppList);
 
 //*****************************************************************************
 // alListFree
 //*****************************************************************************
 // Destroys the list.  Dynamically allocated entries are not freed.
 //
-ALvoid alListFree
-(
-    IN  ALlist* pList
-);
+ALvoid alListFree(IN ALlist *pList);
 
 //*****************************************************************************
 // alListGetData
 //*****************************************************************************
 // Returns the data from the list entry.
 //
-ALvoid* alListGetData
-(
-    IN  ALlistEntry* pEntry
-);
+ALvoid *alListGetData(IN ALlistEntry *pEntry);
 
 //*****************************************************************************
 // alListGetEntryAt
 //*****************************************************************************
 // Returns the entry in the list at the specified index of the list.
 //
-ALlistEntry* alListGetEntryAt
-(
-    IN  ALlist* pList,
-    IN  ALint Index
-);
+ALlistEntry *alListGetEntryAt(IN ALlist *pList, IN ALint Index);
 
 //*****************************************************************************
 // alListGetEntryCount
 //*****************************************************************************
 // Returns the number of items stored in the list.
 //
-ALint alListGetEntryCount
-(
-    IN  ALlist* pList
-);
+ALint alListGetEntryCount(IN ALlist *pList);
 
 //*****************************************************************************
 // alListGetHead
 //*****************************************************************************
 // Returns the first entry in the list.
 //
-ALlistEntry* alListGetHead
-(
-    IN  ALlist* pList
-);
+ALlistEntry *alListGetHead(IN ALlist *pList);
 
 //*****************************************************************************
 // alListGetNext
@@ -232,10 +193,7 @@ ALlistEntry* alListGetHead
 // the iterator is at the last entry (or has finished iterating over the
 // list), the returned entry will be 0.
 //
-ALlistEntry* alListGetNext
-(
-    IN  ALlist* pList
-);
+ALlistEntry *alListGetNext(IN ALlist *pList);
 
 //*****************************************************************************
 // alListGetPrevious
@@ -243,51 +201,35 @@ ALlistEntry* alListGetNext
 // Returns the entry previous to the entry pointed to by the iterator.  If
 // the iterator is at the first entry, the returned entry will be 0.
 //
-ALlistEntry* alListGetPrevious
-(
-    IN  ALlist* pList
-);
+ALlistEntry *alListGetPrevious(IN ALlist *pList);
 
 //*****************************************************************************
 // alListGetTail
 //*****************************************************************************
 // Returns the last entry in the list.
 //
-ALlistEntry* alListGetTail
-(
-    IN  ALlist* pList
-);
+ALlistEntry *alListGetTail(IN ALlist *pList);
 
 //*****************************************************************************
 // alListInitializeEntry
 //*****************************************************************************
 // Initializes a preallocated list entry.
 //
-ALvoid alListInitializeEntry
-(
-    IN  ALlistEntry* pListEntry,
-    IN  ALvoid* pData
-);
+ALvoid alListInitializeEntry(IN ALlistEntry *pListEntry, IN ALvoid *pData);
 
 //*****************************************************************************
 // alListIsEmpty
 //*****************************************************************************
 // Returns the TRUE if the list is empty.
 //
-ALboolean alListIsEmpty
-(
-    IN  ALlist* pList
-);
+ALboolean alListIsEmpty(IN ALlist *pList);
 
 //*****************************************************************************
 // alListIteratorGet
 //*****************************************************************************
 // Returns the entry pointed to by the iterator.
 //
-ALlistEntry* alListIteratorGet
-(
-    IN  ALlist* pList
-);
+ALlistEntry *alListIteratorGet(IN ALlist *pList);
 
 //*****************************************************************************
 // alListIteratorFindData
@@ -295,11 +237,7 @@ ALlistEntry* alListIteratorGet
 // Searches the list for the matching item and return the pointer to the
 // entry.  If the match is not found, the return will be 0.
 //
-ALlistEntry* alListIteratorFindData
-(
-    IN  ALlist* pList,
-    IN  ALvoid* pData
-);
+ALlistEntry *alListIteratorFindData(IN ALlist *pList, IN ALvoid *pData);
 
 //*****************************************************************************
 // alListIteratorNext
@@ -307,10 +245,7 @@ ALlistEntry* alListIteratorFindData
 // This is called to advance the list iterator to the next entry in the list
 // and return that entry.
 //
-ALlistEntry* alListIteratorNext
-(
-    IN  ALlist* pList
-);
+ALlistEntry *alListIteratorNext(IN ALlist *pList);
 
 //*****************************************************************************
 // alListIteratorPrevious
@@ -318,10 +253,7 @@ ALlistEntry* alListIteratorNext
 // This is called to advance the list iterator to the previous entry in the
 // list and return that entry.
 //
-ALlistEntry* alListIteratorPrevious
-(
-    IN  ALlist* pList
-);
+ALlistEntry *alListIteratorPrevious(IN ALlist *pList);
 
 //*****************************************************************************
 // alListIteratorReset
@@ -329,10 +261,7 @@ ALlistEntry* alListIteratorPrevious
 // Returns the list iterator to the head of the list and returns the head
 // entry.
 //
-ALlistEntry* alListIteratorReset
-(
-    IN  ALlist* pList
-);
+ALlistEntry *alListIteratorReset(IN ALlist *pList);
 
 //*****************************************************************************
 // alListIteratorRemove
@@ -340,10 +269,7 @@ ALlistEntry* alListIteratorReset
 // Removes the current item from the list and returns it.  The iterator will
 // equal the next item in the list.
 //
-ALlistEntry* alListIteratorRemove
-(
-    IN  ALlist* pList
-);
+ALlistEntry *alListIteratorRemove(IN ALlist *pList);
 
 //*****************************************************************************
 // alListIteratorSet
@@ -351,11 +277,7 @@ ALlistEntry* alListIteratorRemove
 // Sets the current entry pointer to the entry passed in.  If the entry is not
 // found, the current entry will be 0.
 //
-ALlistEntry* alListIteratorSet
-(
-    IN  ALlist* pList,
-    IN  ALlistEntry* pEntry
-);
+ALlistEntry *alListIteratorSet(IN ALlist *pList, IN ALlistEntry *pEntry);
 
 //*****************************************************************************
 // alListMatchEntry
@@ -363,11 +285,7 @@ ALlistEntry* alListIteratorSet
 // Matches the entry to an item in the list and returns the data in that
 // entry.  If the match is not found, the return will be 0.
 //
-ALvoid* alListMatchEntry
-(
-    IN  ALlist* pList,
-    IN  ALlistEntry* pEntry
-);
+ALvoid *alListMatchEntry(IN ALlist *pList, IN ALlistEntry *pEntry);
 
 //*****************************************************************************
 // alListMatchData
@@ -375,21 +293,14 @@ ALvoid* alListMatchEntry
 // Searches the list for the matching item and return the pointer to the
 // entry.  If the match is not found, the return will be 0.
 //
-ALlistEntry* alListMatchData
-(
-    IN  ALlist* pList,
-    IN  ALvoid* pData
-);
+ALlistEntry *alListMatchData(IN ALlist *pList, IN ALvoid *pData);
 
 //*****************************************************************************
 // alListReleaseLock
 //*****************************************************************************
 // This is called to release the list lock.
 //
-ALvoid alListReleaseLock
-(
-    IN  ALlist* pList
-);
+ALvoid alListReleaseLock(IN ALlist *pList);
 
 //*****************************************************************************
 // alListRemoveEntry
@@ -398,11 +309,7 @@ ALvoid alListReleaseLock
 // this is the current item, the current item will equal the next item in the
 // list.
 //
-ALvoid* alListRemoveEntry
-(
-    IN  ALlist* pList,
-    IN  ALlistEntry* pEntry
-);
+ALvoid *alListRemoveEntry(IN ALlist *pList, IN ALlistEntry *pEntry);
 
 //*****************************************************************************
 // alListRemoveHead
@@ -410,10 +317,7 @@ ALvoid* alListRemoveEntry
 // Removes the list entry at the head of the list.  If this is the current
 // item, the current item will equal the next item in the list.
 //
-ALlistEntry* alListRemoveHead
-(
-    IN  ALlist* pList
-);
+ALlistEntry *alListRemoveHead(IN ALlist *pList);
 
 //*****************************************************************************
 // alListRemoveTail
@@ -421,10 +325,7 @@ ALlistEntry* alListRemoveHead
 // Removes the list entry at the tail of the list.  If this is the current
 // item, the current item will be null.
 //
-ALlistEntry* alListRemoveTail
-(
-    IN  ALlist* pList
-);
+ALlistEntry *alListRemoveTail(IN ALlist *pList);
 
 #ifdef __cplusplus
 }

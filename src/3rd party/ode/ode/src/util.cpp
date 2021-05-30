@@ -20,57 +20,55 @@
  *                                                                       *
  *************************************************************************/
 
-#include "ode/ode.h"
-#include "objects.h"
-#include "joint.h"
 #include "util.h"
+#include "joint.h"
+#include "objects.h"
+#include "ode/ode.h"
 
 #define ALLOCA dALLOCA16
 
 //****************************************************************************
 // Auto disabling
 
-void dInternalHandleAutoDisabling (dxWorld *world, dReal stepsize)
-{
-	/*
-	dxBody *bb;
-	for (bb=world->firstbody; bb; bb=(dxBody*)bb->next) {
-		// nothing to do unless this body is currently enabled and has
-		// the auto-disable flag set
-		if ((bb->flags & (dxBodyAutoDisable|dxBodyDisabled)) != dxBodyAutoDisable) continue;
-		
-		// see if the body is idle
-		int idle = 1;			// initial assumption
-		dReal lspeed2 = dDOT(bb->lvel,bb->lvel);
-		if (lspeed2 > bb->adis.linear_threshold) {
-			idle = 0;		// moving fast - not idle
-		}
-		else {
-			dReal aspeed = dDOT(bb->avel,bb->avel);
-			if (aspeed > bb->adis.angular_threshold) {
-				idle = 0;	// turning fast - not idle
-			}
-		}
-	
-		// if it's idle, accumulate steps and time.
-		// these counters won't overflow because this code doesn't run for disabled bodies.
-		if (idle) {
-			bb->adis_stepsleft--;
-			bb->adis_timeleft -= stepsize;
-		}
-		else {
-			bb->adis_stepsleft = bb->adis.idle_steps;
-			bb->adis_timeleft = bb->adis.idle_time;
-		}
+void dInternalHandleAutoDisabling(dxWorld *world, dReal stepsize) {
+  /*
+  dxBody *bb;
+  for (bb=world->firstbody; bb; bb=(dxBody*)bb->next) {
+          // nothing to do unless this body is currently enabled and has
+          // the auto-disable flag set
+          if ((bb->flags & (dxBodyAutoDisable|dxBodyDisabled)) !=
+  dxBodyAutoDisable) continue;
 
-		// disable the body if it's idle for a long enough time
-		if (bb->adis_stepsleft < 0 && bb->adis_timeleft < 0) {
-			bb->flags |= dxBodyDisabled;
-		}
-	}
-	*/
+          // see if the body is idle
+          int idle = 1;			// initial assumption
+          dReal lspeed2 = dDOT(bb->lvel,bb->lvel);
+          if (lspeed2 > bb->adis.linear_threshold) {
+                  idle = 0;		// moving fast - not idle
+          }
+          else {
+                  dReal aspeed = dDOT(bb->avel,bb->avel);
+                  if (aspeed > bb->adis.angular_threshold) {
+                          idle = 0;	// turning fast - not idle
+                  }
+          }
+
+          // if it's idle, accumulate steps and time.
+          // these counters won't overflow because this code doesn't run for
+  disabled bodies. if (idle) { bb->adis_stepsleft--; bb->adis_timeleft -=
+  stepsize;
+          }
+          else {
+                  bb->adis_stepsleft = bb->adis.idle_steps;
+                  bb->adis_timeleft = bb->adis.idle_time;
+          }
+
+          // disable the body if it's idle for a long enough time
+          if (bb->adis_stepsleft < 0 && bb->adis_timeleft < 0) {
+                  bb->flags |= dxBodyDisabled;
+          }
+  }
+  */
 }
-
 
 //****************************************************************************
 // body rotation
@@ -78,37 +76,37 @@ void dInternalHandleAutoDisabling (dxWorld *world, dReal stepsize)
 // return sin(x)/x. this has a singularity at 0 so special handling is needed
 // for small arguments.
 
-static inline dReal sinc (dReal x)
-{
+static inline dReal sinc(dReal x) {
   // if |x| < 1e-4 then use a taylor series expansion. this two term expansion
   // is actually accurate to one LS bit within this range if double precision
   // is being used - so don't worry!
-  if (dFabs(x) < 1.0e-4) return REAL(1.0) - x*x*REAL(0.166666666666666666667);
-  else return dSin(x)/x;
+  if (dFabs(x) < 1.0e-4)
+    return REAL(1.0) - x * x * REAL(0.166666666666666666667);
+  else
+    return dSin(x) / x;
 }
-
 
 // given a body b, apply its linear and angular rotation over the time
 // interval h, thereby adjusting its position and orientation.
 
-void dxStepBody (dxBody *b, dReal h)
-{
+void dxStepBody(dxBody *b, dReal h) {
   int j;
 #ifdef DEBUG_VALID
-dIASSERT(dValid(b->avel[0])&&dValid(b->avel[1])&&dValid(b->avel[2]));
+  dIASSERT(dValid(b->avel[0]) && dValid(b->avel[1]) && dValid(b->avel[2]));
 #endif
   // handle linear velocity
-  for (j=0; j<3; j++) b->pos[j] += h * b->lvel[j];
+  for (j = 0; j < 3; j++)
+    b->pos[j] += h * b->lvel[j];
 
   if (b->flags & dxBodyFlagFiniteRotation) {
-    dVector3 irv;	// infitesimal rotation vector
-    dQuaternion q;	// quaternion for finite rotation
+    dVector3 irv;  // infitesimal rotation vector
+    dQuaternion q; // quaternion for finite rotation
 
     if (b->flags & dxBodyFlagFiniteRotationAxis) {
       // split the angular velocity vector into a component along the finite
       // rotation axis, and a component orthogonal to it.
-      dVector3 frv;		// finite rotation vector
-      dReal k = dDOT (b->finite_rot_axis,b->avel);
+      dVector3 frv; // finite rotation vector
+      dReal k = dDOT(b->finite_rot_axis, b->avel);
       frv[0] = b->finite_rot_axis[0] * k;
       frv[1] = b->finite_rot_axis[1] * k;
       frv[2] = b->finite_rot_axis[2] * k;
@@ -125,11 +123,10 @@ dIASSERT(dValid(b->avel[0])&&dValid(b->avel[1])&&dValid(b->avel[2]));
       q[1] = frv[0] * s;
       q[2] = frv[1] * s;
       q[3] = frv[2] * s;
-    }
-    else {
+    } else {
       // make a rotation quaternion q that corresponds to w * h
-      dReal wlen = dSqrt (b->avel[0]*b->avel[0] + b->avel[1]*b->avel[1] +
-			  b->avel[2]*b->avel[2]);
+      dReal wlen = dSqrt(b->avel[0] * b->avel[0] + b->avel[1] * b->avel[1] +
+                         b->avel[2] * b->avel[2]);
       h *= REAL(0.5);
       dReal theta = wlen * h;
       q[0] = dCos(theta);
@@ -141,40 +138,36 @@ dIASSERT(dValid(b->avel[0])&&dValid(b->avel[1])&&dValid(b->avel[2]));
 
     // do the finite rotation
     dQuaternion q2;
-    dQMultiply0 (q2,q,b->q);
-    for (j=0; j<4; j++) b->q[j] = q2[j];
+    dQMultiply0(q2, q, b->q);
+    for (j = 0; j < 4; j++)
+      b->q[j] = q2[j];
 
     // do the infitesimal rotation if required
     if (b->flags & dxBodyFlagFiniteRotationAxis) {
       dReal dq[4];
-      dWtoDQ (irv,b->q,dq);
-      for (j=0; j<4; j++) b->q[j] += h * dq[j];
+      dWtoDQ(irv, b->q, dq);
+      for (j = 0; j < 4; j++)
+        b->q[j] += h * dq[j];
     }
-  }
-  else {
+  } else {
     // the normal way - do an infitesimal rotation
     dReal dq[4];
-    dWtoDQ (b->avel,b->q,dq);
-    for (j=0; j<4; j++) b->q[j] += h * dq[j];
+    dWtoDQ(b->avel, b->q, dq);
+    for (j = 0; j < 4; j++)
+      b->q[j] += h * dq[j];
   }
 
   // normalize the quaternion and convert it to a rotation matrix
-  dNormalize4 (b->q);
-  dQtoR (b->q,b->R);
+  dNormalize4(b->q);
+  dQtoR(b->q, b->R);
 
   // notify all attached geoms that this body has moved
-  for (dxGeom *geom = b->geom; geom; geom = dGeomGetBodyNext (geom))
-    dGeomMoved (geom);
+  for (dxGeom *geom = b->geom; geom; geom = dGeomGetBodyNext(geom))
+    dGeomMoved(geom);
 
 #ifdef DEBUG_VALID
-dIASSERT(dValid(b->avel[0])&&dValid(b->avel[1])&&dValid(b->avel[2]));
+  dIASSERT(dValid(b->avel[0]) && dValid(b->avel[1]) && dValid(b->avel[2]));
 #endif
-
-
-
-
-
-
 }
 
 //****************************************************************************
@@ -191,7 +184,7 @@ dIASSERT(dValid(b->avel[0])&&dValid(b->avel[1])&&dValid(b->avel[2]));
 // bodies will not be included in the simulation. disabled bodies are
 // re-enabled if they are found to be part of an active island.
 
-//no need Island collecting! @slipch
+// no need Island collecting! @slipch
 /*
 void dxProcessIslands (dxWorld *world, dReal stepsize, dstepper_fn_t stepper)
 {
@@ -203,7 +196,7 @@ void dxProcessIslands (dxWorld *world, dReal stepsize, dstepper_fn_t stepper)
 
   // handle auto-disabling of bodies
   dInternalHandleAutoDisabling (world,stepsize);
-  
+
   // make arrays for body and joint lists (for a single island) to go into
   body = (dxBody**) ALLOCA (world->nb * sizeof(dxBody*));
   joint = (dxJoint**) ALLOCA (world->nj * sizeof(dxJoint*));
@@ -241,14 +234,14 @@ void dxProcessIslands (dxWorld *world, dReal stepsize, dstepper_fn_t stepper)
       // traverse and tag all body's joints, add untagged connected bodies
       // to stack
       for (dxJointNode *n=b->firstjoint; n; n=n->next) {
-	if (!n->joint->tag) {
-	  n->joint->tag = 1;
-	  joint[jcount++] = n->joint;
-	  if (n->body && !n->body->tag) {
-	    n->body->tag = 1;
-	    stack[stacksize++] = n->body;
-	  }
-	}
+        if (!n->joint->tag) {
+          n->joint->tag = 1;
+          joint[jcount++] = n->joint;
+          if (n->body && !n->body->tag) {
+            n->body->tag = 1;
+            stack[stacksize++] = n->body;
+          }
+        }
       }
       dIASSERT(stacksize <= world->nb);
       dIASSERT(stacksize <= world->nj);
@@ -282,7 +275,7 @@ void dxProcessIslands (dxWorld *world, dReal stepsize, dstepper_fn_t stepper)
   }
   for (j=world->firstjoint; j; j=(dxJoint*)j->next) {
     if ((j->node[0].body && (j->node[0].body->flags & dxBodyDisabled)==0) ||
-	(j->node[1].body && (j->node[1].body->flags & dxBodyDisabled)==0)) {
+        (j->node[1].body && (j->node[1].body->flags & dxBodyDisabled)==0)) {
       if (!j->tag) dDebug (0,"attached enabled joint not tagged");
     }
     else {
@@ -292,37 +285,34 @@ void dxProcessIslands (dxWorld *world, dReal stepsize, dstepper_fn_t stepper)
 # endif
 }
 */
-void dxProcessIslands (dxWorld *world, dReal stepsize, dstepper_fn_t stepper)
-{
-	// nothing to do if no bodies
-	if (world->nb <= 0)
-		return;
+void dxProcessIslands(dxWorld *world, dReal stepsize, dstepper_fn_t stepper) {
+  // nothing to do if no bodies
+  if (world->nb <= 0)
+    return;
 
-#	ifdef TIMING
-	dTimerStart ("creating joint and body arrays");
-#	endif
-	dxBody **bodies, *body;
-	dxJoint **joints, *joint;
-	joints = (dxJoint **) ALLOCA (world->nj * sizeof (dxJoint *));
-	bodies = (dxBody **) ALLOCA (world->nb * sizeof (dxBody *));
+#ifdef TIMING
+  dTimerStart("creating joint and body arrays");
+#endif
+  dxBody **bodies, *body;
+  dxJoint **joints, *joint;
+  joints = (dxJoint **)ALLOCA(world->nj * sizeof(dxJoint *));
+  bodies = (dxBody **)ALLOCA(world->nb * sizeof(dxBody *));
 
-	int nj = 0;
-	for (joint = world->firstjoint; joint; joint = (dxJoint *) joint->next)
-		joints[nj++] = joint;
+  int nj = 0;
+  for (joint = world->firstjoint; joint; joint = (dxJoint *)joint->next)
+    joints[nj++] = joint;
 
-	int nb = 0;
-	for (body = world->firstbody; body; body = (dxBody *) body->next)
-	{
-		body->flags &= ~dxBodyDisabled;
-		bodies[nb++] = body;
+  int nb = 0;
+  for (body = world->firstbody; body; body = (dxBody *)body->next) {
+    body->flags &= ~dxBodyDisabled;
+    bodies[nb++] = body;
+  }
 
-	}
-
-	// now do something with body and joint lists
-	stepper (world,bodies,nb,joints,nj,stepsize);
-//stepper (world,body,bcount,joint,jcount,stepsize);
-#	ifdef TIMING
-	dTimerEnd ();
-	dTimerReport (stdout, 1);
-#	endif
+  // now do something with body and joint lists
+  stepper(world, bodies, nb, joints, nj, stepsize);
+// stepper (world,body,bcount,joint,jcount,stepsize);
+#ifdef TIMING
+  dTimerEnd();
+  dTimerReport(stdout, 1);
+#endif
 }

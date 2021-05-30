@@ -6,23 +6,18 @@
 //	Description : property container property implementation class
 ////////////////////////////////////////////////////////////////////////////
 
-#include "pch.hpp"
 #include "property_property_container.hpp"
+#include "pch.hpp"
 #include "property_holder.hpp"
 
 using System::Object;
 
-property_property_container::property_property_container(property_holder* object) :
-	m_object	(object)
-{
+property_property_container::property_property_container(
+    property_holder *object)
+    : m_object(object) {}
+
+Object ^ property_property_container::get_value() {
+  return (m_object->container());
 }
 
-Object^ property_property_container::get_value			()
-{
-	return		(m_object->container());
-}
-
-void property_property_container::set_value				(Object ^object)
-{
-	NODEFAULT;
-}
+void property_property_container::set_value(Object ^ object) { NODEFAULT; }

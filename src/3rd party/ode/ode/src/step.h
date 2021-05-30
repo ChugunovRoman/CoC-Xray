@@ -25,12 +25,7 @@
 
 #include <ode/common.h>
 
-
-void dInternalStepIsland (dxWorld *world,
-			  dxBody * const *body, int nb,
-			  dxJoint **joint, int nj,
-			  dReal stepsize);
-
-
+void dInternalStepIsland(dxWorld *world, dxBody *const *body, int nb,
+                         dxJoint **joint, int nj, dReal stepsize);
 
 #endif

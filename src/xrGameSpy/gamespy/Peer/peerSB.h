@@ -1,5 +1,5 @@
 /*
-GameSpy Peer SDK 
+GameSpy Peer SDK
 Dan "Mr. Pants" Schoenblum
 dan@gamespy.com
 
@@ -16,7 +16,6 @@ devsupport@gamespy.com
 *************/
 #include "peerMain.h"
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -26,14 +25,18 @@ extern "C" {
 **************/
 PEERBool piSBInit(PEER peer);
 void piSBCleanup(PEER peer);
-PEERBool piSBStartListingGames(PEER peer, const unsigned char * fields, int numFields, const char * filter);
+PEERBool piSBStartListingGames(PEER peer, const unsigned char *fields,
+                               int numFields, const char *filter);
 void piSBStopListingGames(PEER peer);
-void piSBUpdateGame(PEER peer, SBServer server, PEERBool fullUpdate, PEERBool forceUpdateByMaster, PEERBool icmpEcho);
-PEERBool piSBStartListingGroups(PEER peer, const char * fields);
+void piSBUpdateGame(PEER peer, SBServer server, PEERBool fullUpdate,
+                    PEERBool forceUpdateByMaster, PEERBool icmpEcho);
+PEERBool piSBStartListingGroups(PEER peer, const char *fields);
 void piSBStopListingGroups(PEER peer);
 void piSBThink(PEER peer);
-void piSendNatNegotiateCookie(PEER peer, unsigned int ip, unsigned short port, int cookie);
-void piSendMessageToServer(PEER peer, unsigned int ip, unsigned short port, const char * data, int len);
+void piSendNatNegotiateCookie(PEER peer, unsigned int ip, unsigned short port,
+                              int cookie);
+void piSendMessageToServer(PEER peer, unsigned int ip, unsigned short port,
+                           const char *data, int len);
 PEERBool piSBStartListingAutoMatches(PEER peer);
 void piSBStopListingAutoMatches(PEER peer);
 SBServer piSBCloneServer(SBServer server);

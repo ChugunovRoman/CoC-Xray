@@ -9,11 +9,8 @@
 #pragma resource "*.dfm"
 TfrmTimeConstructor *frmTimeConstructor;
 //---------------------------------------------------------------------------
-__fastcall TfrmTimeConstructor::TfrmTimeConstructor(TComponent* Owner)
-    : TForm(Owner)
-{
-    ClientHeight = Panel1->Height;
-    
+__fastcall TfrmTimeConstructor::TfrmTimeConstructor(TComponent *Owner)
+    : TForm(Owner) {
+  ClientHeight = Panel1->Height;
 }
 //---------------------------------------------------------------------------
-

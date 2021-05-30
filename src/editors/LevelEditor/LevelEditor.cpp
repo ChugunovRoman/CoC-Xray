@@ -1,12 +1,12 @@
 #include "stdafx.h"
 #pragma hdrstop
-#include "splash.h"
-#include "../ECore/Editor/LogForm.h"
 #include "../ECore/Editor/EditMesh.h"
-#include "main.h"
-#include "scene.h"
+#include "../ECore/Editor/LogForm.h"
 #include "UI_LevelMain.h"
 #include "UI_LevelTools.h"
+#include "main.h"
+#include "scene.h"
+#include "splash.h"
 //---------------------------------------------------------------------------
 USEFORM("BottomBar.cpp", fraBottomBar); /* TFrame: File Type */
 USEFORM("main.cpp", frmMain);
@@ -37,58 +37,52 @@ USEFORM("FrameFogVol.cpp", fraFogVol);
 USEFORM("Edit\AppendObjectInfoForm.cpp", frmAppendObjectInfo);
 USEFORM("LEClipEditor.cpp", ClipMaker);
 //---------------------------------------------------------------------------
-WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
-{
-//    try{
-        if (!Application->Handle){ 
-            Application->CreateHandle	(); 
-            Application->Icon->Handle 	= LoadIcon(MainInstance, "MAINICON"); 
-			Application->Title 			= "Loading...";
-        } 
-        frmSplash 				= xr_new<TfrmSplash>((TComponent*)0);
-        frmSplash->Show			();
-        frmSplash->Repaint		();
-        frmSplash->SetStatus	("Core initializing...");
+WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int) {
+  //    try{
+  if (!Application->Handle) {
+    Application->CreateHandle();
+    Application->Icon->Handle = LoadIcon(MainInstance, "MAINICON");
+    Application->Title = "Loading...";
+  }
+  frmSplash = xr_new<TfrmSplash>((TComponent *)0);
+  frmSplash->Show();
+  frmSplash->Repaint();
+  frmSplash->SetStatus("Core initializing...");
 
-    	Core._initialize		("level",ELogCallback);
-         CEditableMesh::m_bDraftMeshMode = TRUE;
-        Application->Initialize	();
-                                       
-        frmSplash->SetStatus	("Loading...");
+  Core._initialize("level", ELogCallback);
+  CEditableMesh::m_bDraftMeshMode = TRUE;
+  Application->Initialize();
 
-// startup create
-        Tools					= xr_new<CLevelTool>();
-        UI						= xr_new<CLevelMain>();
-        UI->RegisterCommands	();
-		Scene					= xr_new<EScene>();
-		Application->Title 		= UI->EditorDesc();
-        TfrmLog::CreateLog		();
-		Application->CreateForm(__classid(TfrmMain), &frmMain);
-         Application->CreateForm(__classid(TfrmRight), &frmRight);
-         frmMain->SetHInst		(hInst);
+  frmSplash->SetStatus("Loading...");
 
-		xr_delete(frmSplash);
+  // startup create
+  Tools = xr_new<CLevelTool>();
+  UI = xr_new<CLevelMain>();
+  UI->RegisterCommands();
+  Scene = xr_new<EScene>();
+  Application->Title = UI->EditorDesc();
+  TfrmLog::CreateLog();
+  Application->CreateForm(__classid(TfrmMain), &frmMain);
+  Application->CreateForm(__classid(TfrmRight), &frmRight);
+  frmMain->SetHInst(hInst);
 
-		Application->Run		();
+  xr_delete(frmSplash);
 
+  Application->Run();
 
-        TfrmLog::DestroyLog		();
+  TfrmLog::DestroyLog();
 
-		UI->ClearCommands		();
-        xr_delete				(Scene);
-        xr_delete				(Tools);
-        xr_delete				(UI);
+  UI->ClearCommands();
+  xr_delete(Scene);
+  xr_delete(Tools);
+  xr_delete(UI);
 
-    	Core._destroy			();
-//    }
-//    catch (Exception &exception)
-//    {
-//           Application->ShowException(&exception);
-//    }
-    return 0;
+  Core._destroy();
+  //    }
+  //    catch (Exception &exception)
+  //    {
+  //           Application->ShowException(&exception);
+  //    }
+  return 0;
 }
 //---------------------------------------------------------------------------
-
-
-
-

@@ -1,57 +1,42 @@
-#include <boost/cregex.hpp> 
+#include <boost/cregex.hpp>
 
-extern "C"
-{
-	#include "lua.h"
-	#include "lauxlib.h"
-	#include "lualib.h"
+extern "C" {
+#include "lauxlib.h"
+#include "lua.h"
+#include "lualib.h"
 }
 
 #include <luabind/luabind.hpp>
 
-namespace
-{
-	bool match(boost::RegEx& r, const char* s)
-	{
-		return r.Match(s);
-	}
+namespace {
+bool match(boost::RegEx &r, const char *s) { return r.Match(s); }
 
-	bool search(boost::RegEx& r, const char* s)
-	{
-		return r.Search(s);
-	}
-} // namespace unnamed
+bool search(boost::RegEx &r, const char *s) { return r.Search(s); }
+} // namespace
 
+void wrap_regex(lua_State *L) {
+  using boost::RegEx;
+  using namespace luabind;
 
-void wrap_regex(lua_State* L)
-{
-	using boost::RegEx;
-	using namespace luabind;
-
-	module(L)
-	[
-		class_<RegEx>("regex")
-			.def(constructor<const char*>())
-			.def(constructor<const char*, bool>())
-			.def("match", match)
-			.def("search", search)
-			.def("what", &RegEx::What)
-			.def("matched", &RegEx::Matched)
-			.def("length", &RegEx::Length)
-			.def("position", &RegEx::Position)
-	];
+  module(L)[class_<RegEx>("regex")
+                .def(constructor<const char *>())
+                .def(constructor<const char *, bool>())
+                .def("match", match)
+                .def("search", search)
+                .def("what", &RegEx::What)
+                .def("matched", &RegEx::Matched)
+                .def("length", &RegEx::Length)
+                .def("position", &RegEx::Position)];
 }
 
-void test_wrap_regex()
-{
-	lua_State* L = lua_open();
-	lua_baselibopen(L);
-	lua_strlibopen(L);
-	
-	wrap_regex(L);
-	
-	lua_dofile(L, "regex.lua");
-	
-	lua_close(L);
-}
+void test_wrap_regex() {
+  lua_State *L = lua_open();
+  lua_baselibopen(L);
+  lua_strlibopen(L);
 
+  wrap_regex(L);
+
+  lua_dofile(L, "regex.lua");
+
+  lua_close(L);
+}

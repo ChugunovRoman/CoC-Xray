@@ -1,29 +1,27 @@
 #include "stdafx.h"
 #pragma hdrstop
 
-void __stdcall xrMemFill32_x86(LPVOID dest, u32 value, u32 count)
-{
-    u32* ptr = (u32*)dest;
-    u32* end = ptr + count;
-    for (; ptr != end;) *ptr++ = value;
+void __stdcall xrMemFill32_x86(LPVOID dest, u32 value, u32 count) {
+  u32 *ptr = (u32 *)dest;
+  u32 *end = ptr + count;
+  for (; ptr != end;)
+    *ptr++ = value;
 }
 
 #if defined(M_BORLAND) || defined(_M_AMD64)
-void __stdcall xrMemFill32_MMX(LPVOID dest, u32 value, u32 count)
-{
-    u32* ptr = (u32*)dest;
-    u32* end = ptr + count;
-    for (; ptr != end;) *ptr++ = value;
+void __stdcall xrMemFill32_MMX(LPVOID dest, u32 value, u32 count) {
+  u32 *ptr = (u32 *)dest;
+  u32 *end = ptr + count;
+  for (; ptr != end;)
+    *ptr++ = value;
 }
 #else
 /*
 block fill:fill a number of DWORDs at DWORD aligned destination
 with DWORD initializer using cacheable stores
 */
-void __stdcall xrMemFill32_MMX(LPVOID dest, u32 value, u32 count)
-{
-    __asm
-    {
+void __stdcall xrMemFill32_MMX(LPVOID dest, u32 value, u32 count) {
+  __asm {
         MOV         EDI, [dest]; // pointer to dst,DWORD aligned
         MOV         ECX, [count]; // number of DWORDs to copy
         MOVD        MM0, [value]; // initialization data
@@ -68,6 +66,6 @@ void __stdcall xrMemFill32_MMX(LPVOID dest, u32 value, u32 count)
         MOVD        [EDI], MM0; // store last DWORD to dst
     $filldone2_fc:
         EMMS; // clear MMX state
-    }
+  }
 }
 #endif

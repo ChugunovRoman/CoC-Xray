@@ -11,12 +11,12 @@
 #if LJ_HASJIT
 
 #include "lj_err.h"
-#include "lj_str.h"
 #include "lj_ir.h"
-#include "lj_jit.h"
 #include "lj_iropt.h"
-#include "lj_trace.h"
+#include "lj_jit.h"
 #include "lj_snap.h"
+#include "lj_str.h"
+#include "lj_trace.h"
 #include "lj_vm.h"
 
 /* Loop optimization:
@@ -90,20 +90,19 @@
 */
 
 /* Some local macros to save typing. Undef'd at the end. */
-#define IR(ref)		(&J->cur.ir[(ref)])
+#define IR(ref) (&J->cur.ir[(ref)])
 
 /* Pass IR on to next optimization in chain (FOLD). */
-#define emitir(ot, a, b)	(lj_ir_set(J, (ot), (a), (b)), lj_opt_fold(J))
+#define emitir(ot, a, b) (lj_ir_set(J, (ot), (a), (b)), lj_opt_fold(J))
 
 /* Emit raw IR without passing through optimizations. */
-#define emitir_raw(ot, a, b)	(lj_ir_set(J, (ot), (a), (b)), lj_ir_emit(J))
+#define emitir_raw(ot, a, b) (lj_ir_set(J, (ot), (a), (b)), lj_ir_emit(J))
 
 /* -- PHI elimination ----------------------------------------------------- */
 
 /* Emit or eliminate collected PHIs. */
 static void loop_emit_phi(jit_State *J, IRRef1 *subst, IRRef1 *phi, IRRef nphi,
-			  SnapNo onsnap)
-{
+                          SnapNo onsnap) {
   int passx = 0;
   IRRef i, j, nslots;
   IRRef invar = J->chain[IR_LOOP];
@@ -111,14 +110,14 @@ static void loop_emit_phi(jit_State *J, IRRef1 *subst, IRRef1 *phi, IRRef nphi,
   for (i = 0, j = 0; i < nphi; i++) {
     IRRef lref = phi[i];
     IRRef rref = subst[lref];
-    if (lref == rref || rref == REF_DROP) {  /* Invariants are redundant. */
+    if (lref == rref || rref == REF_DROP) { /* Invariants are redundant. */
       irt_clearphi(IR(lref)->t);
     } else {
       phi[j++] = (IRRef1)lref;
       if (!(IR(rref)->op1 == lref || IR(rref)->op2 == lref)) {
-	/* Quick check for simple recurrences failed, need pass2. */
-	irt_setmark(IR(lref)->t);
-	passx = 1;
+        /* Quick check for simple recurrences failed, need pass2. */
+        irt_setmark(IR(lref)->t);
+        passx = 1;
       }
     }
   }
@@ -126,49 +125,53 @@ static void loop_emit_phi(jit_State *J, IRRef1 *subst, IRRef1 *phi, IRRef nphi,
   /* Pass #2: traverse variant part and clear marks of non-redundant PHIs. */
   if (passx) {
     SnapNo s;
-    for (i = J->cur.nins-1; i > invar; i--) {
+    for (i = J->cur.nins - 1; i > invar; i--) {
       IRIns *ir = IR(i);
-      if (!irref_isk(ir->op2)) irt_clearmark(IR(ir->op2)->t);
+      if (!irref_isk(ir->op2))
+        irt_clearmark(IR(ir->op2)->t);
       if (!irref_isk(ir->op1)) {
-	irt_clearmark(IR(ir->op1)->t);
-	if (ir->op1 < invar &&
-	    ir->o >= IR_CALLN && ir->o <= IR_CARG) {  /* ORDER IR */
-	  ir = IR(ir->op1);
-	  while (ir->o == IR_CARG) {
-	    if (!irref_isk(ir->op2)) irt_clearmark(IR(ir->op2)->t);
-	    if (irref_isk(ir->op1)) break;
-	    ir = IR(ir->op1);
-	    irt_clearmark(ir->t);
-	  }
-	}
+        irt_clearmark(IR(ir->op1)->t);
+        if (ir->op1 < invar && ir->o >= IR_CALLN &&
+            ir->o <= IR_CARG) { /* ORDER IR */
+          ir = IR(ir->op1);
+          while (ir->o == IR_CARG) {
+            if (!irref_isk(ir->op2))
+              irt_clearmark(IR(ir->op2)->t);
+            if (irref_isk(ir->op1))
+              break;
+            ir = IR(ir->op1);
+            irt_clearmark(ir->t);
+          }
+        }
       }
     }
-    for (s = J->cur.nsnap-1; s >= onsnap; s--) {
+    for (s = J->cur.nsnap - 1; s >= onsnap; s--) {
       SnapShot *snap = &J->cur.snap[s];
       SnapEntry *map = &J->cur.snapmap[snap->mapofs];
       MSize n, nent = snap->nent;
       for (n = 0; n < nent; n++) {
-	IRRef ref = snap_ref(map[n]);
-	if (!irref_isk(ref)) irt_clearmark(IR(ref)->t);
+        IRRef ref = snap_ref(map[n]);
+        if (!irref_isk(ref))
+          irt_clearmark(IR(ref)->t);
       }
     }
   }
   /* Pass #3: add PHIs for variant slots without a corresponding SLOAD. */
-  nslots = J->baseslot+J->maxslot;
+  nslots = J->baseslot + J->maxslot;
   for (i = 1; i < nslots; i++) {
     IRRef ref = tref_ref(J->slot[i]);
     while (!irref_isk(ref) && ref != subst[ref]) {
       IRIns *ir = IR(ref);
-      irt_clearmark(ir->t);  /* Unmark potential uses, too. */
+      irt_clearmark(ir->t); /* Unmark potential uses, too. */
       if (irt_isphi(ir->t) || irt_ispri(ir->t))
-	break;
+        break;
       irt_setphi(ir->t);
       if (nphi >= LJ_MAX_PHI)
-	lj_trace_err(J, LJ_TRERR_PHIOV);
+        lj_trace_err(J, LJ_TRERR_PHIOV);
       phi[nphi++] = (IRRef1)ref;
       ref = subst[ref];
       if (ref > invar)
-	break;
+        break;
     }
   }
   /* Pass #4: propagate non-redundant PHIs. */
@@ -177,12 +180,12 @@ static void loop_emit_phi(jit_State *J, IRRef1 *subst, IRRef1 *phi, IRRef nphi,
     for (i = 0; i < nphi; i++) {
       IRRef lref = phi[i];
       IRIns *ir = IR(lref);
-      if (!irt_ismarked(ir->t)) {  /* Propagate only from unmarked PHIs. */
-	IRIns *irr = IR(subst[lref]);
-	if (irt_ismarked(irr->t)) {  /* Right ref points to other PHI? */
-	  irt_clearmark(irr->t);  /* Mark that PHI as non-redundant. */
-	  passx = 1;  /* Retry. */
-	}
+      if (!irt_ismarked(ir->t)) { /* Propagate only from unmarked PHIs. */
+        IRIns *irr = IR(subst[lref]);
+        if (irt_ismarked(irr->t)) { /* Right ref points to other PHI? */
+          irt_clearmark(irr->t);    /* Mark that PHI as non-redundant. */
+          passx = 1;                /* Retry. */
+        }
       }
     }
   }
@@ -190,12 +193,12 @@ static void loop_emit_phi(jit_State *J, IRRef1 *subst, IRRef1 *phi, IRRef nphi,
   for (i = 0; i < nphi; i++) {
     IRRef lref = phi[i];
     IRIns *ir = IR(lref);
-    if (!irt_ismarked(ir->t)) {  /* Emit PHI if not marked. */
+    if (!irt_ismarked(ir->t)) { /* Emit PHI if not marked. */
       IRRef rref = subst[lref];
       if (rref > invar)
-	irt_setphi(IR(rref)->t);
+        irt_setphi(IR(rref)->t);
       emitir_raw(IRT(IR_PHI, irt_type(ir->t)), lref, rref);
-    } else {  /* Otherwise eliminate PHI. */
+    } else { /* Otherwise eliminate PHI. */
       irt_clearmark(ir->t);
       irt_clearphi(ir->t);
     }
@@ -205,19 +208,18 @@ static void loop_emit_phi(jit_State *J, IRRef1 *subst, IRRef1 *phi, IRRef nphi,
 /* -- Loop unrolling using copy-substitution ------------------------------ */
 
 /* Copy-substitute snapshot. */
-static void loop_subst_snap(jit_State *J, SnapShot *osnap,
-			    SnapEntry *loopmap, IRRef1 *subst)
-{
+static void loop_subst_snap(jit_State *J, SnapShot *osnap, SnapEntry *loopmap,
+                            IRRef1 *subst) {
   SnapEntry *nmap, *omap = &J->cur.snapmap[osnap->mapofs];
   SnapEntry *nextmap = &J->cur.snapmap[snap_nextofs(&J->cur, osnap)];
   MSize nmapofs;
   MSize on, ln, nn, onent = osnap->nent;
   BCReg nslots = osnap->nslots;
   SnapShot *snap = &J->cur.snap[J->cur.nsnap];
-  if (irt_isguard(J->guardemit)) {  /* Guard inbetween? */
+  if (irt_isguard(J->guardemit)) { /* Guard inbetween? */
     nmapofs = J->cur.nsnapmap;
-    J->cur.nsnap++;  /* Add new snapshot. */
-  } else {  /* Otherwise overwrite previous snapshot. */
+    J->cur.nsnap++; /* Add new snapshot. */
+  } else {          /* Otherwise overwrite previous snapshot. */
     snap--;
     nmapofs = snap->mapofs;
   }
@@ -233,30 +235,30 @@ static void loop_subst_snap(jit_State *J, SnapShot *osnap,
   on = ln = nn = 0;
   while (on < onent) {
     SnapEntry osn = omap[on], lsn = loopmap[ln];
-    if (snap_slot(lsn) < snap_slot(osn)) {  /* Copy slot from loop map. */
+    if (snap_slot(lsn) < snap_slot(osn)) { /* Copy slot from loop map. */
       nmap[nn++] = lsn;
       ln++;
-    } else {  /* Copy substituted slot from snapshot map. */
-      if (snap_slot(lsn) == snap_slot(osn)) ln++;  /* Shadowed loop slot. */
+    } else { /* Copy substituted slot from snapshot map. */
+      if (snap_slot(lsn) == snap_slot(osn))
+        ln++; /* Shadowed loop slot. */
       if (!irref_isk(snap_ref(osn)))
-	osn = snap_setref(osn, subst[snap_ref(osn)]);
+        osn = snap_setref(osn, subst[snap_ref(osn)]);
       nmap[nn++] = osn;
       on++;
     }
   }
-  while (snap_slot(loopmap[ln]) < nslots)  /* Copy remaining loop slots. */
+  while (snap_slot(loopmap[ln]) < nslots) /* Copy remaining loop slots. */
     nmap[nn++] = loopmap[ln++];
   snap->nent = (uint8_t)nn;
   omap += onent;
   nmap += nn;
-  while (omap < nextmap)  /* Copy PC + frame links. */
+  while (omap < nextmap) /* Copy PC + frame links. */
     *nmap++ = *omap++;
   J->cur.nsnapmap = (uint16_t)(nmap - J->cur.snapmap);
 }
 
 /* Unroll loop. */
-static void loop_unroll(jit_State *J)
-{
+static void loop_unroll(jit_State *J) {
   IRRef1 phi[LJ_MAX_PHI];
   uint32_t nphi = 0;
   IRRef1 *subst;
@@ -271,7 +273,8 @@ static void loop_unroll(jit_State *J)
   */
   invar = J->cur.nins;
   subst = (IRRef1 *)lj_str_needbuf(J->L, &G(J->L)->tmpbuf,
-				   (invar-REF_BIAS)*sizeof(IRRef1)) - REF_BIAS;
+                                   (invar - REF_BIAS) * sizeof(IRRef1)) -
+          REF_BIAS;
   subst[REF_BASE] = REF_BASE;
 
   /* LOOP separates the pre-roll from the loop body. */
@@ -284,16 +287,17 @@ static void loop_unroll(jit_State *J)
   ** Caveat: both calls may reallocate J->cur.snap and J->cur.snapmap!
   */
   onsnap = J->cur.nsnap;
-  lj_snap_grow_buf(J, 2*onsnap-2);
-  lj_snap_grow_map(J, J->cur.nsnapmap*2+(onsnap-2)*J->cur.snap[onsnap-1].nent);
+  lj_snap_grow_buf(J, 2 * onsnap - 2);
+  lj_snap_grow_map(J, J->cur.nsnapmap * 2 +
+                          (onsnap - 2) * J->cur.snap[onsnap - 1].nent);
 
   /* The loop snapshot is used for fallback substitutions. */
-  loopsnap = &J->cur.snap[onsnap-1];
+  loopsnap = &J->cur.snap[onsnap - 1];
   loopmap = &J->cur.snapmap[loopsnap->mapofs];
   /* The PC of snapshot #0 and the loop snapshot must match. */
   psentinel = &loopmap[loopsnap->nent];
   lua_assert(*psentinel == J->cur.snapmap[J->cur.snap[0].nent]);
-  *psentinel = SNAP(255, 0, 0);  /* Replace PC with temporary sentinel. */
+  *psentinel = SNAP(255, 0, 0); /* Replace PC with temporary sentinel. */
 
   /* Start substitution with snapshot #1 (#0 is empty for root traces). */
   osnap = &J->cur.snap[1];
@@ -303,89 +307,90 @@ static void loop_unroll(jit_State *J)
     IRIns *ir;
     IRRef op1, op2;
 
-    if (ins >= osnap->ref)  /* Instruction belongs to next snapshot? */
-      loop_subst_snap(J, osnap++, loopmap, subst);  /* Copy-substitute it. */
+    if (ins >= osnap->ref) /* Instruction belongs to next snapshot? */
+      loop_subst_snap(J, osnap++, loopmap, subst); /* Copy-substitute it. */
 
     /* Substitute instruction operands. */
     ir = IR(ins);
     op1 = ir->op1;
-    if (!irref_isk(op1)) op1 = subst[op1];
+    if (!irref_isk(op1))
+      op1 = subst[op1];
     op2 = ir->op2;
-    if (!irref_isk(op2)) op2 = subst[op2];
-    if (irm_kind(lj_ir_mode[ir->o]) == IRM_N &&
-	op1 == ir->op1 && op2 == ir->op2) {  /* Regular invariant ins? */
-      subst[ins] = (IRRef1)ins;  /* Shortcut. */
+    if (!irref_isk(op2))
+      op2 = subst[op2];
+    if (irm_kind(lj_ir_mode[ir->o]) == IRM_N && op1 == ir->op1 &&
+        op2 == ir->op2) {       /* Regular invariant ins? */
+      subst[ins] = (IRRef1)ins; /* Shortcut. */
     } else {
       /* Re-emit substituted instruction to the FOLD/CSE/etc. pipeline. */
-      IRType1 t = ir->t;  /* Get this first, since emitir may invalidate ir. */
+      IRType1 t = ir->t; /* Get this first, since emitir may invalidate ir. */
       IRRef ref = tref_ref(emitir(ir->ot & ~IRT_ISPHI, op1, op2));
       subst[ins] = (IRRef1)ref;
       if (ref != ins) {
-	IRIns *irr = IR(ref);
-	if (ref < invar) {  /* Loop-carried dependency? */
-	  /* Potential PHI? */
-	  if (!irref_isk(ref) && !irt_isphi(irr->t) && !irt_ispri(irr->t)) {
-	    irt_setphi(irr->t);
-	    if (nphi >= LJ_MAX_PHI)
-	      lj_trace_err(J, LJ_TRERR_PHIOV);
-	    phi[nphi++] = (IRRef1)ref;
-	  }
-	  /* Check all loop-carried dependencies for type instability. */
-	  if (!irt_sametype(t, irr->t)) {
-	    if (irt_isinteger(t) && irt_isinteger(irr->t))
-	      continue;
-	    else if (irt_isnum(t) && irt_isinteger(irr->t))  /* Fix int->num. */
-	      ref = tref_ref(emitir(IRTN(IR_CONV), ref, IRCONV_NUM_INT));
-	    else if (irt_isnum(irr->t) && irt_isinteger(t))  /* Fix num->int. */
-	      ref = tref_ref(emitir(IRTGI(IR_CONV), ref,
-				    IRCONV_INT_NUM|IRCONV_CHECK));
-	    else
-	      lj_trace_err(J, LJ_TRERR_TYPEINS);
-	    subst[ins] = (IRRef1)ref;
-	    irr = IR(ref);
-	    goto phiconv;
-	  }
-	} else if (ref != REF_DROP && irr->o == IR_CONV &&
-		   ref > invar && irr->op1 < invar) {
-	  /* May need an extra PHI for a CONV. */
-	  ref = irr->op1;
-	  irr = IR(ref);
-	phiconv:
-	  if (ref < invar && !irref_isk(ref) && !irt_isphi(irr->t)) {
-	    irt_setphi(irr->t);
-	    if (nphi >= LJ_MAX_PHI)
-	      lj_trace_err(J, LJ_TRERR_PHIOV);
-	    phi[nphi++] = (IRRef1)ref;
-	  }
-	}
+        IRIns *irr = IR(ref);
+        if (ref < invar) { /* Loop-carried dependency? */
+          /* Potential PHI? */
+          if (!irref_isk(ref) && !irt_isphi(irr->t) && !irt_ispri(irr->t)) {
+            irt_setphi(irr->t);
+            if (nphi >= LJ_MAX_PHI)
+              lj_trace_err(J, LJ_TRERR_PHIOV);
+            phi[nphi++] = (IRRef1)ref;
+          }
+          /* Check all loop-carried dependencies for type instability. */
+          if (!irt_sametype(t, irr->t)) {
+            if (irt_isinteger(t) && irt_isinteger(irr->t))
+              continue;
+            else if (irt_isnum(t) && irt_isinteger(irr->t)) /* Fix int->num. */
+              ref = tref_ref(emitir(IRTN(IR_CONV), ref, IRCONV_NUM_INT));
+            else if (irt_isnum(irr->t) && irt_isinteger(t)) /* Fix num->int. */
+              ref = tref_ref(
+                  emitir(IRTGI(IR_CONV), ref, IRCONV_INT_NUM | IRCONV_CHECK));
+            else
+              lj_trace_err(J, LJ_TRERR_TYPEINS);
+            subst[ins] = (IRRef1)ref;
+            irr = IR(ref);
+            goto phiconv;
+          }
+        } else if (ref != REF_DROP && irr->o == IR_CONV && ref > invar &&
+                   irr->op1 < invar) {
+          /* May need an extra PHI for a CONV. */
+          ref = irr->op1;
+          irr = IR(ref);
+        phiconv:
+          if (ref < invar && !irref_isk(ref) && !irt_isphi(irr->t)) {
+            irt_setphi(irr->t);
+            if (nphi >= LJ_MAX_PHI)
+              lj_trace_err(J, LJ_TRERR_PHIOV);
+            phi[nphi++] = (IRRef1)ref;
+          }
+        }
       }
     }
   }
-  if (!irt_isguard(J->guardemit))  /* Drop redundant snapshot. */
+  if (!irt_isguard(J->guardemit)) /* Drop redundant snapshot. */
     J->cur.nsnapmap = (uint16_t)J->cur.snap[--J->cur.nsnap].mapofs;
   lua_assert(J->cur.nsnapmap <= J->sizesnapmap);
-  *psentinel = J->cur.snapmap[J->cur.snap[0].nent];  /* Restore PC. */
+  *psentinel = J->cur.snapmap[J->cur.snap[0].nent]; /* Restore PC. */
 
   loop_emit_phi(J, subst, phi, nphi, onsnap);
 }
 
 /* Undo any partial changes made by the loop optimization. */
-static void loop_undo(jit_State *J, IRRef ins, SnapNo nsnap, MSize nsnapmap)
-{
+static void loop_undo(jit_State *J, IRRef ins, SnapNo nsnap, MSize nsnapmap) {
   ptrdiff_t i;
-  SnapShot *snap = &J->cur.snap[nsnap-1];
+  SnapShot *snap = &J->cur.snap[nsnap - 1];
   SnapEntry *map = J->cur.snapmap;
-  map[snap->mapofs + snap->nent] = map[J->cur.snap[0].nent];  /* Restore PC. */
+  map[snap->mapofs + snap->nent] = map[J->cur.snap[0].nent]; /* Restore PC. */
   J->cur.nsnapmap = (uint16_t)nsnapmap;
   J->cur.nsnap = nsnap;
   J->guardemit.irt = 0;
   lj_ir_rollback(J, ins);
-  for (i = 0; i < BPROP_SLOTS; i++) {  /* Remove backprop. cache entries. */
+  for (i = 0; i < BPROP_SLOTS; i++) { /* Remove backprop. cache entries. */
     BPropEntry *bp = &J->bpropcache[i];
     if (bp->val >= ins)
       bp->key = 0;
   }
-  for (ins--; ins >= REF_FIRST; ins--) {  /* Remove flags. */
+  for (ins--; ins >= REF_FIRST; ins--) { /* Remove flags. */
     IRIns *ir = IR(ins);
     irt_clearphi(ir->t);
     irt_clearmark(ir->t);
@@ -393,40 +398,39 @@ static void loop_undo(jit_State *J, IRRef ins, SnapNo nsnap, MSize nsnapmap)
 }
 
 /* Protected callback for loop optimization. */
-static TValue *cploop_opt(lua_State *L, lua_CFunction dummy, void *ud)
-{
-  UNUSED(L); UNUSED(dummy);
+static TValue *cploop_opt(lua_State *L, lua_CFunction dummy, void *ud) {
+  UNUSED(L);
+  UNUSED(dummy);
   loop_unroll((jit_State *)ud);
   return NULL;
 }
 
 /* Loop optimization. */
-int lj_opt_loop(jit_State *J)
-{
+int lj_opt_loop(jit_State *J) {
   IRRef nins = J->cur.nins;
   SnapNo nsnap = J->cur.nsnap;
   MSize nsnapmap = J->cur.nsnapmap;
   int errcode = lj_vm_cpcall(J->L, NULL, J, cploop_opt);
   if (LJ_UNLIKELY(errcode)) {
     lua_State *L = J->L;
-    if (errcode == LUA_ERRRUN && tvisnumber(L->top-1)) {  /* Trace error? */
-      int32_t e = numberVint(L->top-1);
+    if (errcode == LUA_ERRRUN && tvisnumber(L->top - 1)) { /* Trace error? */
+      int32_t e = numberVint(L->top - 1);
       switch ((TraceError)e) {
-      case LJ_TRERR_TYPEINS:  /* Type instability. */
-      case LJ_TRERR_GFAIL:  /* Guard would always fail. */
-	/* Unrolling via recording fixes many cases, e.g. a flipped boolean. */
-	if (--J->instunroll < 0)  /* But do not unroll forever. */
-	  break;
-	L->top--;  /* Remove error object. */
-	loop_undo(J, nins, nsnap, nsnapmap);
-	return 1;  /* Loop optimization failed, continue recording. */
+      case LJ_TRERR_TYPEINS: /* Type instability. */
+      case LJ_TRERR_GFAIL:   /* Guard would always fail. */
+        /* Unrolling via recording fixes many cases, e.g. a flipped boolean. */
+        if (--J->instunroll < 0) /* But do not unroll forever. */
+          break;
+        L->top--; /* Remove error object. */
+        loop_undo(J, nins, nsnap, nsnapmap);
+        return 1; /* Loop optimization failed, continue recording. */
       default:
-	break;
+        break;
       }
     }
-    lj_err_throw(L, errcode);  /* Propagate all other errors. */
+    lj_err_throw(L, errcode); /* Propagate all other errors. */
   }
-  return 0;  /* Loop optimization is ok. */
+  return 0; /* Loop optimization is ok. */
 }
 
 #undef IR

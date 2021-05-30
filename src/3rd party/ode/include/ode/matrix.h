@@ -27,24 +27,20 @@
 
 #include "common.h"
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-
 /* set a vector/matrix of size n to all zeros, or to a specific value. */
 
-void dSetZero (dReal *a, int n);
-void dSetValue (dReal *a, int n, dReal value);
-
+void dSetZero(dReal *a, int n);
+void dSetValue(dReal *a, int n, dReal value);
 
 /* get the dot product of two n*1 vectors. if n <= 0 then
  * zero will be returned (in which case a and b need not be valid).
  */
 
-dReal dDot (const dReal *a, const dReal *b, int n);
-
+dReal dDot(const dReal *a, const dReal *b, int n);
 
 /* get the dot products of (a0,b), (a1,b), etc and return them in outsum.
  * all vectors are n*1. if n <= 0 then zeroes will be returned (in which case
@@ -54,9 +50,8 @@ dReal dDot (const dReal *a, const dReal *b, int n);
 
 /* NOT INCLUDED in the library for now.
 void dMultidot2 (const dReal *a0, const dReal *a1,
-		 const dReal *b, dReal *outsum, int n);
+                 const dReal *b, dReal *outsum, int n);
 */
-
 
 /* matrix multiplication. all matrices are stored in standard row format.
  * the digit refers to the argument that is transposed:
@@ -67,10 +62,9 @@ void dMultidot2 (const dReal *a0, const dReal *a1,
  * B or C are stored in standard column format.
  */
 
-void dMultiply0 (dReal *A, const dReal *B, const dReal *C, int p,int q,int r);
-void dMultiply1 (dReal *A, const dReal *B, const dReal *C, int p,int q,int r);
-void dMultiply2 (dReal *A, const dReal *B, const dReal *C, int p,int q,int r);
-
+void dMultiply0(dReal *A, const dReal *B, const dReal *C, int p, int q, int r);
+void dMultiply1(dReal *A, const dReal *B, const dReal *C, int p, int q, int r);
+void dMultiply2(dReal *A, const dReal *B, const dReal *C, int p, int q, int r);
 
 /* do an in-place cholesky decomposition on the lower triangle of the n*n
  * symmetric matrix A (which is stored by rows). the resulting lower triangle
@@ -78,23 +72,20 @@ void dMultiply2 (dReal *A, const dReal *B, const dReal *C, int p,int q,int r);
  * the matrix is not positive definite).
  */
 
-int dFactorCholesky (dReal *A, int n);
-
+int dFactorCholesky(dReal *A, int n);
 
 /* solve for x: L*L'*x = b, and put the result back into x.
  * L is size n*n, b is size n*1. only the lower triangle of L is considered.
  */
 
-void dSolveCholesky (const dReal *L, dReal *b, int n);
-
+void dSolveCholesky(const dReal *L, dReal *b, int n);
 
 /* compute the inverse of the n*n positive definite matrix A and put it in
  * Ainv. this is not especially fast. this returns 1 on success (A was
  * positive definite) or 0 on failure (not PD).
  */
 
-int dInvertPDMatrix (const dReal *A, dReal *Ainv, int n);
-
+int dInvertPDMatrix(const dReal *A, dReal *Ainv, int n);
 
 /* check whether an n*n matrix A is positive definite, return 1/0 (yes/no).
  * positive definite means that x'*A*x > 0 for any x. this performs a
@@ -102,8 +93,7 @@ int dInvertPDMatrix (const dReal *A, dReal *Ainv, int n);
  * is not positive definite. A is stored by rows. A is not altered.
  */
 
-int dIsPositiveDefinite (const dReal *A, int n);
-
+int dIsPositiveDefinite(const dReal *A, int n);
 
 /* factorize a matrix A into L*D*L', where L is lower triangular with ones on
  * the diagonal, and D is diagonal.
@@ -112,27 +102,23 @@ int dIsPositiveDefinite (const dReal *A, int n);
  * written) and the reciprocal of the diagonal elements of D are written into
  * d.
  */
-void dFactorLDLT (dReal *A, dReal *d, int n, int nskip);
-
+void dFactorLDLT(dReal *A, dReal *d, int n, int nskip);
 
 /* solve L*x=b, where L is n*n lower triangular with ones on the diagonal,
  * and x,b are n*1. b is overwritten with x.
  * the leading dimension of L is `nskip'.
  */
-void dSolveL1 (const dReal *L, dReal *b, int n, int nskip);
-
+void dSolveL1(const dReal *L, dReal *b, int n, int nskip);
 
 /* solve L'*x=b, where L is n*n lower triangular with ones on the diagonal,
  * and x,b are n*1. b is overwritten with x.
  * the leading dimension of L is `nskip'.
  */
-void dSolveL1T (const dReal *L, dReal *b, int n, int nskip);
-
+void dSolveL1T(const dReal *L, dReal *b, int n, int nskip);
 
 /* in matlab syntax: a(1:n) = a(1:n) .* d(1:n) */
 
-void dVectorScale (dReal *a, const dReal *d, int n);
-
+void dVectorScale(dReal *a, const dReal *d, int n);
 
 /* given `L', a n*n lower triangular matrix with ones on the diagonal,
  * and `d', a n*1 vector of the reciprocal diagonal elements of an n*n matrix
@@ -140,8 +126,7 @@ void dVectorScale (dReal *a, const dReal *d, int n);
  * the leading dimension of L is `nskip'.
  */
 
-void dSolveLDLT (const dReal *L, const dReal *d, dReal *b, int n, int nskip);
-
+void dSolveLDLT(const dReal *L, const dReal *d, dReal *b, int n, int nskip);
 
 /* given an L*D*L' factorization of an n*n matrix A, return the updated
  * factorization L2*D2*L2' of A plus the following "top left" matrix:
@@ -154,10 +139,9 @@ void dSolveLDLT (const dReal *L, const dReal *d, dReal *b, int n, int nskip);
  *   - d has size n. d contains the reciprocal diagonal elements of D.
  *   - a has size n.
  * the result is written into L, except that the left column of L and d[0]
- * are not actually modified. see ldltaddTL.m for further comments. 
+ * are not actually modified. see ldltaddTL.m for further comments.
  */
-void dLDLTAddTL (dReal *L, dReal *d, const dReal *a, int n, int nskip);
-
+void dLDLTAddTL(dReal *L, dReal *d, const dReal *a, int n, int nskip);
 
 /* given an L*D*L' factorization of a permuted matrix A, produce a new
  * factorization for row and column `r' removed.
@@ -176,16 +160,14 @@ void dLDLTAddTL (dReal *L, dReal *d, const dReal *a, int n, int nskip);
  *
  * a fast O(n^2) algorithm is used. see ldltremove.m for further comments.
  */
-void dLDLTRemove (dReal **A, const int *p, dReal *L, dReal *d,
-		  int n1, int n2, int r, int nskip);
-
+void dLDLTRemove(dReal **A, const int *p, dReal *L, dReal *d, int n1, int n2,
+                 int r, int nskip);
 
 /* given an n*n matrix A (with leading dimension nskip), remove the r'th row
  * and column by moving elements. the new matrix will have the same leading
  * dimension. the last row and column of A are untouched on exit.
  */
-void dRemoveRowCol (dReal *A, int n, int nskip, int r);
-
+void dRemoveRowCol(dReal *A, int n, int nskip, int r);
 
 #ifdef __cplusplus
 }

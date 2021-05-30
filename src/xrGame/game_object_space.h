@@ -1,98 +1,96 @@
 #pragma once
 
-namespace GameObject
-{
-    enum ECallbackType
-    {
-		eTradeStart = u32(0),
-		eTradeStop,
-		eTradeSellBuyItem,
-		eTradePerformTradeOperation,
+namespace GameObject {
+enum ECallbackType {
+  eTradeStart = u32(0),
+  eTradeStop,
+  eTradeSellBuyItem,
+  eTradePerformTradeOperation,
 
-		eZoneEnter,
-		eZoneExit,
-		eExitLevelBorder,
-		eEnterLevelBorder,
-		eDeath,
+  eZoneEnter,
+  eZoneExit,
+  eExitLevelBorder,
+  eEnterLevelBorder,
+  eDeath,
 
-		ePatrolPathInPoint,
+  ePatrolPathInPoint,
 
-		eInventoryPda,
-		eInventoryInfo,
-		eArticleInfo,
-		eTaskStateChange,
-		eMapLocationAdded,
+  eInventoryPda,
+  eInventoryInfo,
+  eArticleInfo,
+  eTaskStateChange,
+  eMapLocationAdded,
 
-		eUseObject,
+  eUseObject,
 
-		eHit,
+  eHit,
 
-		eSound,
+  eSound,
 
-		eActionTypeMovement,
-		eActionTypeWatch,
-		eActionTypeRemoved,
-		eActionTypeAnimation,
-		eActionTypeSound,
-		eActionTypeParticle,
-		eActionTypeObject,
+  eActionTypeMovement,
+  eActionTypeWatch,
+  eActionTypeRemoved,
+  eActionTypeAnimation,
+  eActionTypeSound,
+  eActionTypeParticle,
+  eActionTypeObject,
 
-		eActorSleep,
+  eActorSleep,
 
-		eHelicopterOnPoint,
-		eHelicopterOnHit,
+  eHelicopterOnPoint,
+  eHelicopterOnHit,
 
-		eOnItemTake,
-		eOnItemDrop,
+  eOnItemTake,
+  eOnItemDrop,
 
-		eScriptAnimation,
+  eScriptAnimation,
 
-		eTraderGlobalAnimationRequest,
-		eTraderHeadAnimationRequest,
-		eTraderSoundEnd,
+  eTraderGlobalAnimationRequest,
+  eTraderHeadAnimationRequest,
+  eTraderSoundEnd,
 
-		eInvBoxItemTake,
-		eWeaponNoAmmoAvailable,
-		//Alundaio: added defines
-		eActorHudAnimationEnd,
-        //AVO: custom callbacks
+  eInvBoxItemTake,
+  eWeaponNoAmmoAvailable,
+  // Alundaio: added defines
+  eActorHudAnimationEnd,
+// AVO: custom callbacks
 #ifdef INPUT_CALLBACKS
-		// input
-        eKeyPress,
-        eKeyRelease,
-        eKeyHold,
+  // input
+  eKeyPress,
+  eKeyRelease,
+  eKeyHold,
 #endif
 #ifdef MOUSE_INPUT_CALLBACKS
-        eMouseMove,
-        eMouseWheel,
+  eMouseMove,
+  eMouseWheel,
 #endif
 #ifdef EXTENDED_ITEM_CALLBACKS
-        // inventory
-        eItemToBelt,
-        eItemToSlot,
-        eItemToRuck,
+  // inventory
+  eItemToBelt,
+  eItemToSlot,
+  eItemToRuck,
 #endif
-#ifdef	EXTENDED_WEAPON_CALLBACKS
-		// weapon
-		eOnWeaponZoomIn,
-		eOnWeaponZoomOut,
-		eOnWeaponJammed,
-		eOnWeaponFired,
-		eOnWeaponMagazineEmpty,
+#ifdef EXTENDED_WEAPON_CALLBACKS
+  // weapon
+  eOnWeaponZoomIn,
+  eOnWeaponZoomOut,
+  eOnWeaponJammed,
+  eOnWeaponFired,
+  eOnWeaponMagazineEmpty,
 #endif
-        // actor
+// actor
 #ifdef ACTOR_BEFORE_DEATH_CALLBACK
-        eActorBeforeDeath,
+  eActorBeforeDeath,
 #endif
 #ifdef ENABLE_CAR
-		// vehicle
-		eAttachVehicle,
-		eDetachVehicle,
-		eUseVehicle,
-		eOnFootStep,
+  // vehicle
+  eAttachVehicle,
+  eDetachVehicle,
+  eUseVehicle,
+  eOnFootStep,
 #endif
-        //-AVO
+  //-AVO
 
-        eDummy = u32(-1),
-    };
+  eDummy = u32(-1),
 };
+}; // namespace GameObject

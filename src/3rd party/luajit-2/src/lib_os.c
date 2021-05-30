@@ -12,13 +12,13 @@
 #define lib_os_c
 #define LUA_LIB
 
-#include "lua.h"
 #include "lauxlib.h"
+#include "lua.h"
 #include "lualib.h"
 
-#include "lj_obj.h"
 #include "lj_err.h"
 #include "lj_lib.h"
+#include "lj_obj.h"
 
 #if LJ_TARGET_POSIX
 #include <unistd.h>
@@ -34,8 +34,7 @@
 
 #define LJLIB_MODULE_os
 
-LJLIB_CF(os_execute)
-{
+LJLIB_CF(os_execute) {
 #if LJ_NO_SYSTEM
 #if LJ_52
   errno = ENOSYS;
@@ -58,27 +57,24 @@ LJLIB_CF(os_execute)
 #endif
 }
 
-LJLIB_CF(os_remove)
-{
+LJLIB_CF(os_remove) {
   const char *filename = luaL_checkstring(L, 1);
   return luaL_fileresult(L, remove(filename) == 0, filename);
 }
 
-LJLIB_CF(os_rename)
-{
+LJLIB_CF(os_rename) {
   const char *fromname = luaL_checkstring(L, 1);
   const char *toname = luaL_checkstring(L, 2);
   return luaL_fileresult(L, rename(fromname, toname) == 0, fromname);
 }
 
-LJLIB_CF(os_tmpname)
-{
+LJLIB_CF(os_tmpname) {
 #if LJ_TARGET_PS3 || LJ_TARGET_PS4 || LJ_TARGET_PSVITA
   lj_err_caller(L, LJ_ERR_OSUNIQF);
   return 0;
 #else
 #if LJ_TARGET_POSIX
-  char buf[15+1];
+  char buf[15 + 1];
   int fp;
   strcpy(buf, "/tmp/lua_XXXXXX");
   fp = mkstemp(buf);
@@ -96,53 +92,47 @@ LJLIB_CF(os_tmpname)
 #endif
 }
 
-LJLIB_CF(os_getenv)
-{
+LJLIB_CF(os_getenv) {
 #if LJ_TARGET_CONSOLE
   lua_pushnil(L);
 #else
-  lua_pushstring(L, getenv(luaL_checkstring(L, 1)));  /* if NULL push nil */
+  lua_pushstring(L, getenv(luaL_checkstring(L, 1))); /* if NULL push nil */
 #endif
   return 1;
 }
 
-LJLIB_CF(os_exit)
-{
+LJLIB_CF(os_exit) {
   int status;
   if (L->base < L->top && tvisbool(L->base))
     status = boolV(L->base) ? EXIT_SUCCESS : EXIT_FAILURE;
   else
     status = lj_lib_optint(L, 1, EXIT_SUCCESS);
-  if (L->base+1 < L->top && tvistruecond(L->base+1))
+  if (L->base + 1 < L->top && tvistruecond(L->base + 1))
     lua_close(L);
   exit(status);
-  return 0;  /* Unreachable. */
+  return 0; /* Unreachable. */
 }
 
-LJLIB_CF(os_clock)
-{
-  setnumV(L->top++, ((lua_Number)clock())*(1.0/(lua_Number)CLOCKS_PER_SEC));
+LJLIB_CF(os_clock) {
+  setnumV(L->top++, ((lua_Number)clock()) * (1.0 / (lua_Number)CLOCKS_PER_SEC));
   return 1;
 }
 
 /* ------------------------------------------------------------------------ */
 
-static void setfield(lua_State *L, const char *key, int value)
-{
+static void setfield(lua_State *L, const char *key, int value) {
   lua_pushinteger(L, value);
   lua_setfield(L, -2, key);
 }
 
-static void setboolfield(lua_State *L, const char *key, int value)
-{
-  if (value < 0)  /* undefined? */
-    return;  /* does not set field */
+static void setboolfield(lua_State *L, const char *key, int value) {
+  if (value < 0) /* undefined? */
+    return;      /* does not set field */
   lua_pushboolean(L, value);
   lua_setfield(L, -2, key);
 }
 
-static int getboolfield(lua_State *L, const char *key)
-{
+static int getboolfield(lua_State *L, const char *key) {
   int res;
   lua_getfield(L, -1, key);
   res = lua_isnil(L, -1) ? -1 : lua_toboolean(L, -1);
@@ -150,8 +140,7 @@ static int getboolfield(lua_State *L, const char *key)
   return res;
 }
 
-static int getfield(lua_State *L, const char *key, int d)
-{
+static int getfield(lua_State *L, const char *key, int d) {
   int res;
   lua_getfield(L, -1, key);
   if (lua_isnumber(L, -1)) {
@@ -165,16 +154,15 @@ static int getfield(lua_State *L, const char *key, int d)
   return res;
 }
 
-LJLIB_CF(os_date)
-{
+LJLIB_CF(os_date) {
   const char *s = luaL_optstring(L, 1, "%c");
   time_t t = luaL_opt(L, (time_t)luaL_checknumber, 2, time(NULL));
   struct tm *stm;
 #if LJ_TARGET_POSIX
   struct tm rtm;
 #endif
-  if (*s == '!') {  /* UTC? */
-    s++;  /* Skip '!' */
+  if (*s == '!') { /* UTC? */
+    s++;           /* Skip '!' */
 #if LJ_TARGET_POSIX
     stm = gmtime_r(&t, &rtm);
 #else
@@ -187,33 +175,34 @@ LJLIB_CF(os_date)
     stm = localtime(&t);
 #endif
   }
-  if (stm == NULL) {  /* Invalid date? */
-    setnilV(L->top-1);
+  if (stm == NULL) { /* Invalid date? */
+    setnilV(L->top - 1);
   } else if (strcmp(s, "*t") == 0) {
-    lua_createtable(L, 0, 9);  /* 9 = number of fields */
+    lua_createtable(L, 0, 9); /* 9 = number of fields */
     setfield(L, "sec", stm->tm_sec);
     setfield(L, "min", stm->tm_min);
     setfield(L, "hour", stm->tm_hour);
     setfield(L, "day", stm->tm_mday);
-    setfield(L, "month", stm->tm_mon+1);
-    setfield(L, "year", stm->tm_year+1900);
-    setfield(L, "wday", stm->tm_wday+1);
-    setfield(L, "yday", stm->tm_yday+1);
+    setfield(L, "month", stm->tm_mon + 1);
+    setfield(L, "year", stm->tm_year + 1900);
+    setfield(L, "wday", stm->tm_wday + 1);
+    setfield(L, "yday", stm->tm_yday + 1);
     setboolfield(L, "isdst", stm->tm_isdst);
   } else {
     char cc[3];
     luaL_Buffer b;
-    cc[0] = '%'; cc[2] = '\0';
+    cc[0] = '%';
+    cc[2] = '\0';
     luaL_buffinit(L, &b);
     for (; *s; s++) {
-      if (*s != '%' || *(s + 1) == '\0') {  /* No conversion specifier? */
-	luaL_addchar(&b, *s);
+      if (*s != '%' || *(s + 1) == '\0') { /* No conversion specifier? */
+        luaL_addchar(&b, *s);
       } else {
-	size_t reslen;
-	char buff[200];  /* Should be big enough for any conversion result. */
-	cc[1] = *(++s);
-	reslen = strftime(buff, sizeof(buff), cc, stm);
-	luaL_addlstring(&b, buff, reslen);
+        size_t reslen;
+        char buff[200]; /* Should be big enough for any conversion result. */
+        cc[1] = *(++s);
+        reslen = strftime(buff, sizeof(buff), cc, stm);
+        luaL_addlstring(&b, buff, reslen);
       }
     }
     luaL_pushresult(&b);
@@ -221,15 +210,14 @@ LJLIB_CF(os_date)
   return 1;
 }
 
-LJLIB_CF(os_time)
-{
+LJLIB_CF(os_time) {
   time_t t;
-  if (lua_isnoneornil(L, 1)) {  /* called without args? */
-    t = time(NULL);  /* get current time */
+  if (lua_isnoneornil(L, 1)) { /* called without args? */
+    t = time(NULL);            /* get current time */
   } else {
     struct tm ts;
     luaL_checktype(L, 1, LUA_TTABLE);
-    lua_settop(L, 1);  /* make sure table is at the top */
+    lua_settop(L, 1); /* make sure table is at the top */
     ts.tm_sec = getfield(L, "sec", 0);
     ts.tm_min = getfield(L, "min", 0);
     ts.tm_hour = getfield(L, "hour", 12);
@@ -246,30 +234,34 @@ LJLIB_CF(os_time)
   return 1;
 }
 
-LJLIB_CF(os_difftime)
-{
+LJLIB_CF(os_difftime) {
   lua_pushnumber(L, difftime((time_t)(luaL_checknumber(L, 1)),
-			     (time_t)(luaL_optnumber(L, 2, (lua_Number)0))));
+                             (time_t)(luaL_optnumber(L, 2, (lua_Number)0))));
   return 1;
 }
 
 /* ------------------------------------------------------------------------ */
 
-LJLIB_CF(os_setlocale)
-{
+LJLIB_CF(os_setlocale) {
 #if LJ_TARGET_PSVITA
   lua_pushliteral(L, "C");
 #else
   GCstr *s = lj_lib_optstr(L, 1);
   const char *str = s ? strdata(s) : NULL;
-  int opt = lj_lib_checkopt(L, 2, 6,
-    "\5ctype\7numeric\4time\7collate\10monetary\1\377\3all");
-  if (opt == 0) opt = LC_CTYPE;
-  else if (opt == 1) opt = LC_NUMERIC;
-  else if (opt == 2) opt = LC_TIME;
-  else if (opt == 3) opt = LC_COLLATE;
-  else if (opt == 4) opt = LC_MONETARY;
-  else if (opt == 6) opt = LC_ALL;
+  int opt = lj_lib_checkopt(
+      L, 2, 6, "\5ctype\7numeric\4time\7collate\10monetary\1\377\3all");
+  if (opt == 0)
+    opt = LC_CTYPE;
+  else if (opt == 1)
+    opt = LC_NUMERIC;
+  else if (opt == 2)
+    opt = LC_TIME;
+  else if (opt == 3)
+    opt = LC_COLLATE;
+  else if (opt == 4)
+    opt = LC_MONETARY;
+  else if (opt == 6)
+    opt = LC_ALL;
   lua_pushstring(L, setlocale(opt, str));
 #endif
   return 1;
@@ -279,9 +271,7 @@ LJLIB_CF(os_setlocale)
 
 #include "lj_libdef.h"
 
-LUALIB_API int luaopen_os(lua_State *L)
-{
+LUALIB_API int luaopen_os(lua_State *L) {
   LJ_LIB_REG(L, LUA_OSLIBNAME, os);
   return 1;
 }
-

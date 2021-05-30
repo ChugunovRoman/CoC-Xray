@@ -1,5 +1,5 @@
 /*
-GameSpy Ping SDK 
+GameSpy Ping SDK
 Dan "Mr. Pants" Schoenblum
 dan@gamespy.com
 
@@ -25,12 +25,12 @@ extern "C" {
 // The rest can be used by the app.
 //////////////////////////////////////////
 #ifndef PINGER_UDP_PING_SIZE
-#define PINGER_UDP_PING_SIZE     32
+#define PINGER_UDP_PING_SIZE 32
 #endif
 
 // Value for ping if a ping timed-out.
 //////////////////////////////////////
-#define PINGER_TIMEOUT           -1
+#define PINGER_TIMEOUT -1
 
 /**********
 ** TYPES **
@@ -46,12 +46,8 @@ typedef enum { PINGERFalse, PINGERTrue } PINGERBool;
 // if the ping times out, ping is PINGER_TIMEOUT
 // IP and port are in network byte order
 //////////////////////////////////////////////////////////////////////////////
-typedef void (* pingerGotPing)(unsigned int IP,
-							   unsigned short port,
-							   int ping,
-							   const char * data,
-							   int len,
-							   void * param);
+typedef void (*pingerGotPing)(unsigned int IP, unsigned short port, int ping,
+                              const char *data, int len, void *param);
 
 // When a ping is sent, this callback gets called so that
 // the application can use the ping bytes not being used
@@ -59,11 +55,8 @@ typedef void (* pingerGotPing)(unsigned int IP,
 // The application can write up to len bytes to data.
 // IP and port are in network byte order.
 /////////////////////////////////////////////////////////
-typedef void (* pingerSetData)(unsigned int IP,
-							   unsigned short port,
-							   char * data,
-							   int len,
-							   void * param);
+typedef void (*pingerSetData)(unsigned int IP, unsigned short port, char *data,
+                              int len, void *param);
 
 /**************
 ** FUNCTIONS **
@@ -74,12 +67,9 @@ typedef void (* pingerSetData)(unsigned int IP,
 // localAddress=NULL : don't specify a local interface
 // localPort=0 : not doing UDP pings
 //////////////////////////////////////////////////////
-PINGERBool pingerInit(const char * localAddress,
-					  unsigned short localPort,
-					  pingerGotPing pinged,
-					  void * pingedParam,
-					  pingerSetData setData,
-					  void * setDataParam);
+PINGERBool pingerInit(const char *localAddress, unsigned short localPort,
+                      pingerGotPing pinged, void *pingedParam,
+                      pingerSetData setData, void *setDataParam);
 
 // Called to clean-up when done with pinger.
 ////////////////////////////////////////////
@@ -103,13 +93,9 @@ void pingerThink(void);
 // port!=0 : UDP ping
 // IP and port are in network byte order
 //////////////////////////////////////////////////////////////////////////
-void pingerPing(unsigned int IP,
-				unsigned short port,
-				pingerGotPing reply,
-				void * replyParam,
-				PINGERBool blocking,
-				gsi_time timeout);
-	
+void pingerPing(unsigned int IP, unsigned short port, pingerGotPing reply,
+                void *replyParam, PINGERBool blocking, gsi_time timeout);
+
 #ifdef __cplusplus
 }
 #endif

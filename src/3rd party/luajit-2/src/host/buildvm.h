@@ -6,48 +6,49 @@
 #ifndef _BUILDVM_H
 #define _BUILDVM_H
 
-#include <sys/types.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <errno.h>
+#include <sys/types.h>
 
-#include "lj_def.h"
 #include "lj_arch.h"
+#include "lj_def.h"
 
 /* Hardcoded limits. Increase as needed. */
-#define BUILD_MAX_RELOC		200	/* Max. number of relocations. */
-#define BUILD_MAX_FOLD		4096	/* Max. number of fold rules. */
+#define BUILD_MAX_RELOC 200 /* Max. number of relocations. */
+#define BUILD_MAX_FOLD 4096 /* Max. number of fold rules. */
 
 /* Prefix for scanned library definitions. */
-#define LIBDEF_PREFIX		"LJLIB_"
+#define LIBDEF_PREFIX "LJLIB_"
 
 /* Prefix for scanned fold definitions. */
-#define FOLDDEF_PREFIX		"LJFOLD"
+#define FOLDDEF_PREFIX "LJFOLD"
 
 /* Prefixes for generated labels. */
-#define LABEL_PREFIX		"lj_"
-#define LABEL_PREFIX_BC		LABEL_PREFIX "BC_"
-#define LABEL_PREFIX_FF		LABEL_PREFIX "ff_"
-#define LABEL_PREFIX_CF		LABEL_PREFIX "cf_"
-#define LABEL_PREFIX_FFH	LABEL_PREFIX "ffh_"
-#define LABEL_PREFIX_LIBCF	LABEL_PREFIX "lib_cf_"
-#define LABEL_PREFIX_LIBINIT	LABEL_PREFIX "lib_init_"
+#define LABEL_PREFIX "lj_"
+#define LABEL_PREFIX_BC LABEL_PREFIX "BC_"
+#define LABEL_PREFIX_FF LABEL_PREFIX "ff_"
+#define LABEL_PREFIX_CF LABEL_PREFIX "cf_"
+#define LABEL_PREFIX_FFH LABEL_PREFIX "ffh_"
+#define LABEL_PREFIX_LIBCF LABEL_PREFIX "lib_cf_"
+#define LABEL_PREFIX_LIBINIT LABEL_PREFIX "lib_init_"
 
 /* Forward declaration. */
 struct dasm_State;
 
 /* Build modes. */
-#define BUILDDEF(_) \
-  _(elfasm) _(coffasm) _(machasm) _(peobj) _(raw) \
-  _(bcdef) _(ffdef) _(libdef) _(recdef) _(vmdef) \
-  _(folddef)
+#define BUILDDEF(_)                                                            \
+  _(elfasm)                                                                    \
+  _(coffasm)                                                                   \
+  _(machasm) _(peobj) _(raw) _(bcdef) _(ffdef) _(libdef) _(recdef) _(vmdef)    \
+      _(folddef)
 
 typedef enum {
-#define BUILDENUM(name)		BUILD_##name,
-BUILDDEF(BUILDENUM)
+#define BUILDENUM(name) BUILD_##name,
+  BUILDDEF(BUILDENUM)
 #undef BUILDENUM
-  BUILD__MAX
+      BUILD__MAX
 } BuildMode;
 
 /* Code relocation. */

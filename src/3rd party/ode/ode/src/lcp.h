@@ -24,9 +24,9 @@
 
 given (A,b,lo,hi), solve the LCP problem: A*x = b+w, where each x(i),w(i)
 satisfies one of
-	(1) x = lo, w >= 0
-	(2) x = hi, w <= 0
-	(3) lo < x < hi, w = 0
+        (1) x = lo, w >= 0
+        (2) x = hi, w <= 0
+        (3) lo < x < hi, w = 0
 A is a matrix of dimension n*n, everything else is a vector of size n*1.
 lo and hi can be +/- dInfinity as needed. the first `nub' variables are
 unbounded, i.e. hi and lo are assumed to be +/- dInfinity.
@@ -46,13 +46,10 @@ to be implemented. the first `nub' variables are assumed to have findex < 0.
 
 */
 
-
 #ifndef _ODE_LCP_H_
 #define _ODE_LCP_H_
 
-
-void dSolveLCP (int n, dReal *A, dReal *x, dReal *b, dReal *w,
-		int nub, dReal *lo, dReal *hi, int *findex);
-
+void dSolveLCP(int n, dReal *A, dReal *x, dReal *b, dReal *w, int nub,
+               dReal *lo, dReal *hi, int *findex);
 
 #endif

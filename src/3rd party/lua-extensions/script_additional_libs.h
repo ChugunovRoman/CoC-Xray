@@ -4,10 +4,10 @@
 
 #include "lua.hpp"
 
-#include <cstdlib>
 #include <cctype>
+#include <cstdlib>
 
 typedef unsigned long DWORD;
 typedef unsigned char BYTE;
 
-void open_additional_libs(lua_State*);
+void open_additional_libs(lua_State *);

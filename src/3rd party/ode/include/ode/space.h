@@ -38,8 +38,7 @@ extern "C" {
 
 struct dContactGeom;
 
-typedef void dNearCallback (void *data, dGeomID o1, dGeomID o2);
-
+typedef void dNearCallback(void *data, dGeomID o1, dGeomID o2);
 
 /* extra information the space needs in every geometry object */
 
@@ -47,19 +46,18 @@ typedef struct dGeomSpaceData {
   dGeomID next;
 } dGeomSpaceData;
 
+dSpaceID dSimpleSpaceCreate(int dummy);
+dSpaceID dHashSpaceCreate(int dummy);
+dSpaceID dQuadTreeSpaceCreate(int dummy, dVector3 Center, dVector3 Extents,
+                              int Depth);
 
-dSpaceID dSimpleSpaceCreate (int dummy);
-dSpaceID dHashSpaceCreate (int dummy);
-dSpaceID dQuadTreeSpaceCreate (int dummy, dVector3 Center, dVector3 Extents, int Depth);
+void dSpaceDestroy(dSpaceID);
+void dSpaceAdd(dSpaceID, dGeomID);
+void dSpaceRemove(dSpaceID, dGeomID);
+void dSpaceCollide(dSpaceID space, void *data, dNearCallback *callback);
+int dSpaceQuery(dSpaceID, dGeomID);
 
-void dSpaceDestroy (dSpaceID);
-void dSpaceAdd (dSpaceID, dGeomID);
-void dSpaceRemove (dSpaceID, dGeomID);
-void dSpaceCollide (dSpaceID space, void *data, dNearCallback *callback);
-int dSpaceQuery (dSpaceID, dGeomID);
-
-void dHashSpaceSetLevels (dSpaceID space, int minlevel, int maxlevel);
-
+void dHashSpaceSetLevels(dSpaceID space, int minlevel, int maxlevel);
 
 /* @@@ NOT FLEXIBLE ENOUGH
  *
@@ -70,13 +68,11 @@ void dHashSpaceSetLevels (dSpaceID space, int minlevel, int maxlevel);
  */
 /* int dSpaceCollide (dSpaceID space, dContactGeom **contact_array); */
 
-
 /* HMMMMM... i dont think so.
  * tell the space that an object has moved, so its representation in the
  * space should be changed.
  */
 /* void dSpaceObjectMoved (dSpaceID, dGeomID); */
-
 
 #ifdef __cplusplus
 }

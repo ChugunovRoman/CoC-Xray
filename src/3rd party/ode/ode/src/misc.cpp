@@ -21,126 +21,104 @@
  *************************************************************************/
 
 #include <ode/config.h>
-#include <ode/misc.h>
 #include <ode/matrix.h>
+#include <ode/misc.h>
 
 //****************************************************************************
 // random numbers
 
 static unsigned long seed = 0;
 
-unsigned long dRand()
-{
-  seed = (1664525L*seed + 1013904223L) & 0xffffffff;
+unsigned long dRand() {
+  seed = (1664525L * seed + 1013904223L) & 0xffffffff;
   return seed;
 }
 
+unsigned long dRandGetSeed() { return seed; }
 
-unsigned long  dRandGetSeed()
-{
-  return seed;
-}
+void dRandSetSeed(unsigned long s) { seed = s; }
 
-
-void dRandSetSeed (unsigned long s)
-{
-  seed = s;
-}
-
-
-int dTestRand()
-{
+int dTestRand() {
   unsigned long oldseed = seed;
   int ret = 1;
   seed = 0;
-  if (dRand() != 0x3c6ef35f || dRand() != 0x47502932 ||
-      dRand() != 0xd1ccf6e9 || dRand() != 0xaaf95334 ||
-      dRand() != 0x6252e503) ret = 0;
+  if (dRand() != 0x3c6ef35f || dRand() != 0x47502932 || dRand() != 0xd1ccf6e9 ||
+      dRand() != 0xaaf95334 || dRand() != 0x6252e503)
+    ret = 0;
   seed = oldseed;
   return ret;
 }
 
-
-int dRandInt (int n)
-{
+int dRandInt(int n) {
   double a = double(n) / 4294967296.0;
-  return (int) (double(dRand()) * a);
+  return (int)(double(dRand()) * a);
 }
 
-
-dReal dRandReal()
-{
-  return ((dReal) dRand()) / ((dReal) 0xffffffff);
-}
+dReal dRandReal() { return ((dReal)dRand()) / ((dReal)0xffffffff); }
 
 //****************************************************************************
 // matrix utility stuff
 
-void dPrintMatrix (const dReal *A, int n, int m, char *fmt, FILE *f)
-{
-  int i,j;
+void dPrintMatrix(const dReal *A, int n, int m, char *fmt, FILE *f) {
+  int i, j;
   int skip = dPAD(m);
-  for (i=0; i<n; i++) {
-    for (j=0; j<m; j++) fprintf (f,fmt,A[i*skip+j]);
-    fprintf (f,"\n");
+  for (i = 0; i < n; i++) {
+    for (j = 0; j < m; j++)
+      fprintf(f, fmt, A[i * skip + j]);
+    fprintf(f, "\n");
   }
 }
 
-
-void dMakeRandomVector (dReal *A, int n, dReal range)
-{
+void dMakeRandomVector(dReal *A, int n, dReal range) {
   int i;
-  for (i=0; i<n; i++) A[i] = (dRandReal()*REAL(2.0)-REAL(1.0))*range;
+  for (i = 0; i < n; i++)
+    A[i] = (dRandReal() * REAL(2.0) - REAL(1.0)) * range;
 }
 
-
-void dMakeRandomMatrix (dReal *A, int n, int m, dReal range)
-{
-  int i,j;
+void dMakeRandomMatrix(dReal *A, int n, int m, dReal range) {
+  int i, j;
   int skip = dPAD(m);
-  dSetZero (A,n*skip);
-  for (i=0; i<n; i++) {
-    for (j=0; j<m; j++) A[i*skip+j] = (dRandReal()*REAL(2.0)-REAL(1.0))*range;
+  dSetZero(A, n * skip);
+  for (i = 0; i < n; i++) {
+    for (j = 0; j < m; j++)
+      A[i * skip + j] = (dRandReal() * REAL(2.0) - REAL(1.0)) * range;
   }
 }
 
-
-void dClearUpperTriangle (dReal *A, int n)
-{
-  int i,j;
+void dClearUpperTriangle(dReal *A, int n) {
+  int i, j;
   int skip = dPAD(n);
-  for (i=0; i<n; i++) {
-    for (j=i+1; j<n; j++) A[i*skip+j] = 0;
+  for (i = 0; i < n; i++) {
+    for (j = i + 1; j < n; j++)
+      A[i * skip + j] = 0;
   }
 }
 
-
-dReal dMaxDifference (const dReal *A, const dReal *B, int n, int m)
-{
-  int i,j;
+dReal dMaxDifference(const dReal *A, const dReal *B, int n, int m) {
+  int i, j;
   int skip = dPAD(m);
-  dReal diff,max;
+  dReal diff, max;
   max = 0;
-  for (i=0; i<n; i++) {
-    for (j=0; j<m; j++) {
-      diff = dFabs(A[i*skip+j] - B[i*skip+j]);
-      if (diff > max) max = diff;
+  for (i = 0; i < n; i++) {
+    for (j = 0; j < m; j++) {
+      diff = dFabs(A[i * skip + j] - B[i * skip + j]);
+      if (diff > max)
+        max = diff;
     }
   }
   return max;
 }
 
-
-dReal dMaxDifferenceLowerTriangle (const dReal *A, const dReal *B, int n)
-{
-  int i,j;
+dReal dMaxDifferenceLowerTriangle(const dReal *A, const dReal *B, int n) {
+  int i, j;
   int skip = dPAD(n);
-  dReal diff,max;
+  dReal diff, max;
   max = 0;
-  for (i=0; i<n; i++) {
-    for (j=0; j<=i; j++) {
-      diff = dFabs(A[i*skip+j] - B[i*skip+j]);
-      if (diff > max) max = diff;
+  for (i = 0; i < n; i++) {
+    for (j = 0; j <= i; j++) {
+      diff = dFabs(A[i * skip + j] - B[i * skip + j]);
+      if (diff > max)
+        max = diff;
     }
   }
   return max;

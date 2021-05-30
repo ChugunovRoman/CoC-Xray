@@ -9,19 +9,25 @@
 #include "lj_obj.h"
 
 /* Object type names. */
-LJ_DATADEF const char *const lj_obj_typename[] = {  /* ORDER LUA_T */
-  "no value", "nil", "boolean", "userdata", "number", "string",
-  "table", "function", "userdata", "thread", "proto", "cdata"
-};
+LJ_DATADEF const char *const lj_obj_typename[] = {/* ORDER LUA_T */
+                                                  "no value", "nil",
+                                                  "boolean",  "userdata",
+                                                  "number",   "string",
+                                                  "table",    "function",
+                                                  "userdata", "thread",
+                                                  "proto",    "cdata"};
 
-LJ_DATADEF const char *const lj_obj_itypename[] = {  /* ORDER LJ_T */
-  "nil", "boolean", "boolean", "userdata", "string", "upval", "thread",
-  "proto", "function", "trace", "cdata", "table", "userdata", "number"
-};
+LJ_DATADEF const char *const lj_obj_itypename[] = {/* ORDER LJ_T */
+                                                   "nil",      "boolean",
+                                                   "boolean",  "userdata",
+                                                   "string",   "upval",
+                                                   "thread",   "proto",
+                                                   "function", "trace",
+                                                   "cdata",    "table",
+                                                   "userdata", "number"};
 
 /* Compare two objects without calling metamethods. */
-int lj_obj_equal(cTValue *o1, cTValue *o2)
-{
+int lj_obj_equal(cTValue *o1, cTValue *o2) {
   if (itype(o1) == itype(o2)) {
     if (tvispri(o1))
       return 1;
@@ -32,4 +38,3 @@ int lj_obj_equal(cTValue *o1, cTValue *o2)
   }
   return numberVnum(o1) == numberVnum(o2);
 }
-
